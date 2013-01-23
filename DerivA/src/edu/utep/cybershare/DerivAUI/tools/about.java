@@ -44,7 +44,7 @@ public class about extends javax.swing.JFrame {
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel8.setText("Homepage:");
 
-        jLabel9.setText("http://trust.cs.utep.edu/derivA");
+        jLabel9.setText("trust.cs.utep.edu/derivA");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

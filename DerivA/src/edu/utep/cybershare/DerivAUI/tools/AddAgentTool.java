@@ -7,8 +7,11 @@ import javax.swing.JOptionPane;
 
 import edu.utep.cybershare.DerivA.util.CIServerDump;
 import edu.utep.cybershare.DerivA.util.NodeSetBuilder;
+import edu.utep.cybershare.DerivA.util.ServerCredentials;
+import edu.utep.cybershare.DerivAUI.DerivAUI;
 import edu.utep.cybershare.DerivAUI.components.IndividualList;
 import edu.utep.cybershare.DerivAUI.components.InferenceRulesList;
+import edu.utep.cybershare.DerivAUI.components.IndividualList.Individual;
 import edu.utep.trust.provenance.RDFAggregater;
 import edu.utep.trust.provenance.RDFAggregater_Service;
 
@@ -32,18 +35,18 @@ public class AddAgentTool extends javax.swing.JFrame {
 	
 	private IndividualList Avail_IR;
 	private IndividualList Selected_IR;
-	private Vector<edu.utep.cybershare.DerivAUI.components.IndividualList.Individual> AvailableIRs;
-	private Vector<edu.utep.cybershare.DerivAUI.components.IndividualList.Individual> SelectedIRs;
+	private Vector<edu.utep.cybershare.DerivAUI.components.IndividualList.Individual> Avail_IRVector;
+	private Vector<edu.utep.cybershare.DerivAUI.components.IndividualList.Individual> Selected_IRVector;
+	public Vector<Individual> inferenceRuleVector;
 	
-    private String ServerURL, uploaderName, uploaderPass, CIProject;
+	private DerivAUI instance;
+	private ServerCredentials creds;
 	// End of variables declaration         
 	
 	/** Creates new form addNewAgentTool */
-	public AddAgentTool(String tURL, String project, String tUName, String tPass) {
-    	uploaderName = tUName;
-    	uploaderPass = tPass;
-    	ServerURL = tURL;
-    	CIProject = project;
+	public AddAgentTool(DerivAUI inst, ServerCredentials sc) {
+    	creds = sc;
+    	instance = inst;
 		initComponents();
 	}
 
@@ -62,18 +65,20 @@ public class AddAgentTool extends javax.swing.JFrame {
         descriptionLabel = new javax.swing.JLabel();
         descriptionTF = new javax.swing.JTextField();
 		
-		AvailableIRs = new InferenceRulesList().getPMLList();
+        Avail_IRVector = new InferenceRulesList().getPMLList();
+        Selected_IRVector = new Vector<edu.utep.cybershare.DerivAUI.components.IndividualList.Individual>();
 		
 		Avail_IR = new IndividualList();
 		Selected_IR = new IndividualList();
 
-		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+		setTitle("Add Agent Tool");
 
 		addAgentLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
 		addAgentLabel.setText("Add New Agent");
 
 		jScrollPane1.setViewportView(Avail_IR);
-		Avail_IR.setModel(AvailableIRs);
+		Avail_IR.setModel(Avail_IRVector);
 
 		jScrollPane2.setViewportView(Selected_IR);
 
@@ -175,37 +180,37 @@ public class AddAgentTool extends javax.swing.JFrame {
                 .addContainerGap())
         );
         pack();
-		setLocationRelativeTo(null);
+		setLocationRelativeTo(this);
 	}                       
 
 	public void addAction(java.awt.event.ActionEvent evt){
 		Object CSS = Avail_IR.getSelectedValue();
-		if(SelectedIRs != null){
-			if(!SelectedIRs.contains(CSS)){
-				SelectedIRs.add((edu.utep.cybershare.DerivAUI.components.IndividualList.Individual) CSS);
+		if(Selected_IRVector != null){
+			if(!Selected_IRVector.contains(CSS)){
+				Selected_IRVector.add((edu.utep.cybershare.DerivAUI.components.IndividualList.Individual) CSS);
 			}
 		}else{
-			SelectedIRs = new Vector<edu.utep.cybershare.DerivAUI.components.IndividualList.Individual>();
-			SelectedIRs.add((edu.utep.cybershare.DerivAUI.components.IndividualList.Individual) CSS);
+			Selected_IRVector = new Vector<edu.utep.cybershare.DerivAUI.components.IndividualList.Individual>();
+			Selected_IRVector.add((edu.utep.cybershare.DerivAUI.components.IndividualList.Individual) CSS);
 		}
 
-		Selected_IR.setModel(SelectedIRs);
+		Selected_IR.setModel(Selected_IRVector);
 		Selected_IR.repaint();
 	}
 	
 	public void removeAction(java.awt.event.ActionEvent evt){
 		Object CSA = Selected_IR.getSelectedValue();
-		if(SelectedIRs != null){
-			if(SelectedIRs.contains(CSA)){
-				SelectedIRs.remove(CSA);
+		if(Selected_IRVector != null){
+			if(Selected_IRVector.contains(CSA)){
+				Selected_IRVector.remove(CSA);
 			}
 		}
-		Selected_IR.setModel(SelectedIRs);
+		Selected_IR.setModel(Selected_IRVector);
 		Selected_IR.repaint();
 	}
 	
 	public void cancelAction(java.awt.event.ActionEvent evt){
-		setVisible(false);
+		dispose();
 	}
 	
 	public void submitAction(java.awt.event.ActionEvent evt){
@@ -217,12 +222,13 @@ public class AddAgentTool extends javax.swing.JFrame {
 		String description = descriptionTF.getText();
 		
 		NodeSetBuilder NSB = new NodeSetBuilder();
-		String AgentString = NSB.createAgent("http://someuri.owl#uri", fullName, description, ServerURL + "pmlp/" + fullName);
+		NSB.inferenceRuleVector = Selected_IRVector;
+		String AgentString = NSB.createAgent("http://someuri.owl#uri", fullName, description, creds.getServerURL() + "pmlp/" + fullName);
 		
 		//Upload data file to CI-Server
-		CIServerDump uploader = new CIServerDump(ServerURL + "pmlp/", uploaderName, uploaderPass);
+		CIServerDump uploader = new CIServerDump(creds.getServerURL() + "pmlp/", creds.getUsername(), creds.getPassword());
 		byte[] resource_bytes = AgentString.getBytes();
-		String artifactURI = uploader.savePMLPToCIServer(fullName + ".owl", CIProject, resource_bytes, true);
+		String artifactURI = uploader.savePMLPToCIServer(fullName + ".owl", creds.getProject(), resource_bytes, true);
 		
 		
 		RDFAggregater_Service Service = new RDFAggregater_Service();

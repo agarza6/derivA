@@ -153,9 +153,12 @@ public class ESIPUploader {
 
 		//Upload data file to CI-Server
 		CIServerDump uploader = new CIServerDump(pmlp_url + "pmlp/", uploaderName, uploaderPass);
+
 		byte[] resource_bytes = pmlP.getBytes();
+
 		String artifactURI = uploader.savePMLPToCIServer(shortName + ".owl", CIProject, resource_bytes, false);
 
+		//Add To The Triple Store
 		RDFAggregater_Service Service = new RDFAggregater_Service();
 		RDFAggregater proxy = Service.getRDFAggregaterHttpPort();
 		String result = "";
@@ -165,11 +168,11 @@ public class ESIPUploader {
 			intents++;
 		}
 
-//		if(result.equalsIgnoreCase("SUCCESS")){
-//			System.out.println("Aggregation Successful");
-//		}else{
-//			System.out.println("Aggregation Failed");
-//		}
+				if(result.equalsIgnoreCase("SUCCESS")){
+					System.out.println("Aggregation Successful");
+				}else{
+					System.out.println("Aggregation Failed");
+				}
 
 		return artifactURI;
 	}
@@ -218,90 +221,90 @@ public class ESIPUploader {
 	public static void main(String[] args){
 
 		pmlp_url = "http://rio.cs.utep.edu/ciserver/ciprojects/";
-
-		ArrayList<String> orgs = new ArrayList<String>();
-		ArrayList<String> readTemp = new ArrayList<String>();
-
-
-		try{
-			// Open the file that is the first 
-			// command line parameter
-			FileInputStream fstream = new FileInputStream("out.txt");
-			// Get the object of DataInputStream
-			DataInputStream in = new DataInputStream(fstream);
-			BufferedReader br = new BufferedReader(new InputStreamReader(in));
-			String strLine;
-			//Read File Line By Line
-			while ((strLine = br.readLine()) != null)   {
-				// Print the content on the console
-				readTemp.add(strLine);
-			}
-			in.close();
-
-		}catch (Exception e){//Catch exception if any
-			System.err.println("Error: " + e.getMessage());
-		}
-
-		try{
-			// Open the file that is the first 
-			// command line parameter
-			FileInputStream fstream = new FileInputStream("esip.txt");
-			// Get the object of DataInputStream
-			DataInputStream in = new DataInputStream(fstream);
-			BufferedReader br = new BufferedReader(new InputStreamReader(in));
-			String strLine;
-			//Read File Line By Line
-			while ((strLine = br.readLine()) != null)   {
-				// Print the content on the console
-				orgs.add(strLine);
-			}
-
-			in.close();
-
-		}catch (Exception e){//Catch exception if any
-			System.err.println("Error: " + e.getMessage());
-		}
-
-		CurrentlyShort = new String[orgs.size() + readTemp.size()];
-		CurrentlyURI = new String[orgs.size() + readTemp.size()];
-
-		int counter  = 0;
-		for(Iterator<String> iter = readTemp.iterator(); iter.hasNext();){
-			String one = iter.next();
-			CurrentlyURI[counter] = one.substring(0, one.indexOf(','));
-			CurrentlyShort[counter] = one.substring(one.indexOf(','));
-			counter++;
-		}
-
-//		capturePerson(orgs);
-
-		for(Iterator<String> iter = orgs.iterator(); iter.hasNext();){
-			String temp = iter.next();
-			String[] aTemp = temp.split(",");
-			String parentURI = null;
-
-			if(aTemp[3].equalsIgnoreCase("null")){
-				aTemp[3] = null;
-				parentURI = null;
-			}else{
-				for(int i = 0; i < CurrentlyShort.length; i++){
-					if(CurrentlyShort[i] != null && CurrentlyShort[i].equalsIgnoreCase(aTemp[3])){
-						parentURI = CurrentlyURI[i];
-						break;
-					}
-				}
-			}
-
-			setValues(aTemp[0], aTemp[1], aTemp[2], parentURI,aTemp[3]);
-//			setValuesPeople(aTemp[0], aTemp[1], aTemp[2], aTemp[4], aTemp[5], aTemp[6], aTemp[7], aTemp[8], aTemp[9], aTemp[10], aTemp[11]);
-
-			String pmlp = createOrganizationPMLP();
-			CurrentlyURI[counter] = uploadProvenance(pmlp, "agarza6", "Vegeta1984!", "ESIP-Network");
-			CurrentlyShort[counter] = aTemp[0];
-			counter++;
-		}
-
-		writePMLFile();
+		captureEngine();
+		//		ArrayList<String> orgs = new ArrayList<String>();
+		//		ArrayList<String> readTemp = new ArrayList<String>();
+		//
+		//
+		//		try{
+		//			// Open the file that is the first 
+		//			// command line parameter
+		//			FileInputStream fstream = new FileInputStream("out.txt");
+		//			// Get the object of DataInputStream
+		//			DataInputStream in = new DataInputStream(fstream);
+		//			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+		//			String strLine;
+		//			//Read File Line By Line
+		//			while ((strLine = br.readLine()) != null)   {
+		//				// Print the content on the console
+		//				readTemp.add(strLine);
+		//			}
+		//			in.close();
+		//
+		//		}catch (Exception e){//Catch exception if any
+		//			System.err.println("Error: " + e.getMessage());
+		//		}
+		//
+		//		try{
+		//			// Open the file that is the first 
+		//			// command line parameter
+		//			FileInputStream fstream = new FileInputStream("esip.txt");
+		//			// Get the object of DataInputStream
+		//			DataInputStream in = new DataInputStream(fstream);
+		//			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+		//			String strLine;
+		//			//Read File Line By Line
+		//			while ((strLine = br.readLine()) != null)   {
+		//				// Print the content on the console
+		//				orgs.add(strLine);
+		//			}
+		//
+		//			in.close();
+		//
+		//		}catch (Exception e){//Catch exception if any
+		//			System.err.println("Error: " + e.getMessage());
+		//		}
+		//
+		//		CurrentlyShort = new String[orgs.size() + readTemp.size()];
+		//		CurrentlyURI = new String[orgs.size() + readTemp.size()];
+		//
+		//		int counter  = 0;
+		//		for(Iterator<String> iter = readTemp.iterator(); iter.hasNext();){
+		//			String one = iter.next();
+		//			CurrentlyURI[counter] = one.substring(0, one.indexOf(','));
+		//			CurrentlyShort[counter] = one.substring(one.indexOf(','));
+		//			counter++;
+		//		}
+		//
+		//		//		capturePerson(orgs);
+		//
+		//		for(Iterator<String> iter = orgs.iterator(); iter.hasNext();){
+		//			String temp = iter.next();
+		//			String[] aTemp = temp.split(",");
+		//			String parentURI = null;
+		//
+		//			if(aTemp[3].equalsIgnoreCase("null")){
+		//				aTemp[3] = null;
+		//				parentURI = null;
+		//			}else{
+		//				for(int i = 0; i < CurrentlyShort.length; i++){
+		//					if(CurrentlyShort[i] != null && CurrentlyShort[i].equalsIgnoreCase(aTemp[3])){
+		//						parentURI = CurrentlyURI[i];
+		//						break;
+		//					}
+		//				}
+		//			}
+		//
+		//			setValues(aTemp[0], aTemp[1], aTemp[2], parentURI,aTemp[3]);
+		//			//			setValuesPeople(aTemp[0], aTemp[1], aTemp[2], aTemp[4], aTemp[5], aTemp[6], aTemp[7], aTemp[8], aTemp[9], aTemp[10], aTemp[11]);
+		//
+		//			String pmlp = createOrganizationPMLP();
+		//			CurrentlyURI[counter] = uploadProvenance(pmlp, "agarza6", "Vegeta1984!", "ESIP-Network");
+		//			CurrentlyShort[counter] = aTemp[0];
+		//			counter++;
+		//		}
+		//
+		//		writePMLFile();
 
 		System.out.println("WORK COMPLETE");
 
@@ -319,6 +322,100 @@ public class ESIPUploader {
 			//uploadProvenance(pmlp, "agarza6", "Vegeta1984!", "ESIP-Network-Members");
 		}
 
+	}
+
+	private static void captureFormat(){
+
+		String[] formats = {"HDF"};
+
+		pmlp_url = "http://rio.cs.utep.edu/ciserver/ciprojects/";
+		String pmlP = "";
+
+
+		for(int i = 0; i < formats.length; i++){
+
+			shortName = formats[i];
+
+			pmlP = "<rdf:RDF" + '\n';
+			pmlP += '\t' + "xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"" + '\n';
+			pmlP += '\t' + "xmlns:owl=\"http://www.w3.org/2002/07/owl#\"" + '\n';
+			pmlP += '\t' + "xmlns:pmlp=\"http://inference-web.org/2.0/pml-provenance.owl#\"" + '\n';
+			pmlP += '\t' + "xmlns:daml=\"http://www.daml.org/2001/03/daml+oil#\"" + '\n';
+			pmlP += '\t' + "xmlns:rdfs=\"http://www.w3.org/2000/01/rdf-schema#\"" + '\n';
+			pmlP += '\t' + "xmlns:ds=\"http://inference-web.org/2.0/ds.owl#\">" + '\n';
+			pmlP += "\t\t" + "<pmlp:Format rdf:about=\"http://rio.cs.utep.edu/ciserver/ciprojects/EDAC/" + formats[i] + ".owl#" + formats[i] + "\">" + '\n';
+			pmlP += "\t\t" + "<pmlp:hasDescription>" + '\n';
+			pmlP += "\t\t\t" + "<pmlp:Information>" + '\n';
+			pmlP += "\t\t\t" + "<pmlp:hasLanguage rdf:resource=\"http://inference-web.org/registry/LG/English.owl#English\"/>" + '\n';
+			pmlP += "\t\t\t" + "</pmlp:Information>" + '\n';
+			pmlP += "\t\t\t" + "</pmlp:hasDescription>" + '\n';
+			pmlP += "\t\t\t" + "<pmlp:hasName rdf:datatype=\"http://www.w3.org/2001/XMLSchema#string\">" + formats[i] + "</pmlp:hasName>" + '\n';
+			pmlP += "\t\t" + "</pmlp:Format>" + '\n';
+			pmlP += '\t' + "</rdf:RDF>";
+
+			uploadProvenance(pmlP, "agarza6", "AGarza62012!", "EDAC");
+			System.out.println("1");
+		}
+	}
+
+	private static void captureEngine(){
+
+		String[] formats = {"TXT", "PNG", "SHP", "GML", "KML", "GeoJSON", "CSU", "GeoTIFF", "SID", "ECW", "HDF", "NetCDF", "ArcASCIIGrid", "DEM", "JSON", "XML", "DOC", "DOCX",
+				"XLSX", "PDF", "HTML", "PNG", "GIF", "JPEG", "ZIP", "GeoRSS", "GRIB", "GeoDB", "XLS", "ISOXML", "FGDCXML", "DCXML", "WCSCapXML", "WMSCapXML",
+				"WCSDescribeXML", "WFSDescribeFeatTypeXML", "WaterML"};
+
+		pmlp_url = "http://rio.cs.utep.edu/ciserver/ciprojects/";
+		String pmlP = "";
+
+
+//		for(int i = 0; i < formats.length; i++){
+
+			shortName = "REST";
+
+			pmlP = "<rdf:RDF" + '\n';
+			pmlP += "\t" + "xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"" + '\n';
+			pmlP += "\t" + "xmlns:owl=\"http://www.w3.org/2002/07/owl#\"" + '\n';
+			pmlP += "\t" + "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema#\"" + '\n';
+			pmlP += "\t" + "xmlns:pmlp=\"http://inference-web.org/2.0/pml-provenance.owl#\"" + '\n';
+			pmlP += "\t" + "xmlns:rdfs=\"http://www.w3.org/2000/01/rdf-schema#\"" + '\n';
+			pmlP += "\t" + "xmlns:ds=\"http://inference-web.org/2.0/ds.owl#\">" + '\n';
+			
+			
+			pmlP += "\t" + "<pmlp:InferenceEngine rdf:about=\"http://rio.cs.utep.edu/ciserver/ciprojects/pmlp/" + shortName + ".owl#" + shortName + "\">" + '\n';
+			
+			
+//			pmlP += "\t\t" + "<pmlp:hasInferenceEngineRule rdf:resource=\"http://rio.cs.utep.edu/ciserver/ciprojects/wdo/EDAC#m11\"/>" + '\n';
+//			pmlP += "\t\t" + "<pmlp:hasInferenceEngineRule rdf:resource=\"http://rio.cs.utep.edu/ciserver/ciprojects/wdo/EDAC#m12\"/>" + '\n';
+//			pmlP += "\t\t" + "<pmlp:hasInferenceEngineRule rdf:resource=\"http://rio.cs.utep.edu/ciserver/ciprojects/wdo/EDAC#m17\"/>" + '\n';
+//			pmlP += "\t\t" + "<pmlp:hasInferenceEngineRule rdf:resource=\"http://rio.cs.utep.edu/ciserver/ciprojects/wdo/EDAC#m13\"/>" + '\n';
+//			pmlP += "\t\t" + "<pmlp:hasInferenceEngineRule rdf:resource=\"http://rio.cs.utep.edu/ciserver/ciprojects/wdo/EDAC#m3\"/>" + '\n';
+//			pmlP += "\t\t" + "<pmlp:hasInferenceEngineRule rdf:resource=\"http://rio.cs.utep.edu/ciserver/ciprojects/wdo/EDAC#m55\"/>" + '\n';
+//			pmlP += "\t\t" + "<pmlp:hasInferenceEngineRule rdf:resource=\"http://rio.cs.utep.edu/ciserver/ciprojects/wdo/EDAC#m18\"/>" + '\n';
+//			pmlP += "\t\t" + "<pmlp:hasInferenceEngineRule rdf:resource=\"http://rio.cs.utep.edu/ciserver/ciprojects/wdo/EDAC#m14\"/>" + '\n';
+//			pmlP += "\t\t" + "<pmlp:hasInferenceEngineRule rdf:resource=\"http://rio.cs.utep.edu/ciserver/ciprojects/wdo/EDAC#m11\"/>" + '\n';
+//			pmlP += "\t\t" + "<pmlp:hasInferenceEngineRule rdf:resource=\"http://rio.cs.utep.edu/ciserver/ciprojects/wdo/EDAC#m21\"/>" + '\n';
+//			pmlP += "\t\t" + "<pmlp:hasInferenceEngineRule rdf:resource=\"http://rio.cs.utep.edu/ciserver/ciprojects/wdo/EDAC#m22\"/>" + '\n';
+//			pmlP += "\t\t" + "<pmlp:hasInferenceEngineRule rdf:resource=\"http://rio.cs.utep.edu/ciserver/ciprojects/wdo/EDAC#m4\"/>" + '\n';
+//			pmlP += "\t\t" + "<pmlp:hasInferenceEngineRule rdf:resource=\"http://rio.cs.utep.edu/ciserver/ciprojects/wdo/EDAC#m20\"/>" + '\n';
+//			pmlP += "\t\t" + "<pmlp:hasInferenceEngineRule rdf:resource=\"http://rio.cs.utep.edu/ciserver/ciprojects/wdo/EDAC#m15\"/>" + '\n';
+//			pmlP += "\t\t" + "<pmlp:hasInferenceEngineRule rdf:resource=\"http://rio.cs.utep.edu/ciserver/ciprojects/wdo/EDAC#m54\"/>" + '\n';
+						
+			pmlP += "\t\t" + "<pmlp:hasDescription>" + '\n';
+			pmlP += "\t\t" + "<pmlp:Information>" + '\n';
+			pmlP += "\t\t" + "<pmlp:hasLanguage rdf:resource=\"http://inference-web.org/registry/LG/English.owl#English\"/>" + '\n';
+			pmlP += "\t\t" + "<pmlp:hasRawString rdf:datatype=\"http://www.w3.org/2001/XMLSchema#string\">" + shortName + "</pmlp:hasRawString>" + '\n';
+			pmlP += "\t\t" + "<pmlp:hasURL rdf:datatype=\"http://www.w3.org/2001/XMLSchema#anyURI\">http://rio.cs.utep.edu/ciserver/ciprojects/pmlp/" + shortName + ".owl</pmlp:hasURL>" + '\n';
+			pmlP += "\t\t" + "</pmlp:Information>" + '\n';
+			pmlP += "\t\t" + "</pmlp:hasDescription>" + '\n';
+			pmlP += "\t\t" + "<pmlp:hasName rdf:datatype=\"http://www.w3.org/2001/XMLSchema#string\">" + shortName + "</pmlp:hasName>" + '\n';
+			pmlP += "\t" + "</pmlp:InferenceEngine>" + '\n';
+			pmlP += "" + "</rdf:RDF>";
+
+			System.out.println(pmlP);
+			
+			uploadProvenance(pmlP, "agarza6", "vegeta1984!", "EDAC");
+
+//		}
 	}
 
 }

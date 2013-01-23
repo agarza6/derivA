@@ -4,16 +4,21 @@ import java.util.Vector;
 
 import java.util.HashMap;
 
+import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.ResultSetFactory;
 
+import edu.utep.cybershare.DerivAUI.components.IndividualComboBox.Individual;
+
 public class AgentComboBox extends IndividualComboBox {
+	
 	private static final long serialVersionUID = 1L;
 	private HashMap<String,Integer> prettyNames = new HashMap<String,Integer>();
-	public AgentComboBox(boolean bol) {
+	private Vector<Individual> individuals = new Vector<Individual>();
+	
+	public AgentComboBox() {
 		super();
-		if(bol)
-			queryAgents();
+		queryAgents(0);
 	}
 	
 	public static String stripURI(String formatURI)
@@ -24,12 +29,33 @@ public class AgentComboBox extends IndividualComboBox {
 		return name;
 	}
 
-	public void queryAgents() {
+	public void queryAgents(int selection) {
 		Vector<Individual> individuals = new Vector<Individual>();
 
 		edu.utep.trust.provenance.RDFStore_Service service = new edu.utep.trust.provenance.RDFStore_Service();
 		edu.utep.trust.provenance.RDFStore proxy = service.getRDFStoreHttpPort();
-		String agents = proxy.getInferenceEngines();
+		
+		String query = "";
+		switch (selection){
+		case 0: query = "PREFIX pmlp: <http://inference-web.org/2.0/pml-provenance.owl#>" + 
+				"SELECT ?uri " + 
+				"WHERE {?uri a pmlp:Agent }";
+		break;
+		case 1: query = "PREFIX pmlp: <http://inference-web.org/2.0/pml-provenance.owl#>" +
+				"SELECT ?uri " +
+				"WHERE { ?uri a pmlp:InferenceEngine . }";
+		break;
+		case 2: query = "PREFIX pmlp: <http://inference-web.org/2.0/pml-provenance.owl#>" +
+				"SELECT ?uri " +
+				"WHERE { ?uri a pmlp:Person . }";
+		break;
+		case 3: query = "PREFIX pmlp: <http://inference-web.org/2.0/pml-provenance.owl#>" +
+				"SELECT ?uri " +
+				"WHERE { ?uri a pmlp:Organization . }";
+		break;
+		}
+		
+		String agents = proxy.doQuery(query);
 		
 		ResultSet results = ResultSetFactory.fromXML(agents);
 		
@@ -45,7 +71,7 @@ public class AgentComboBox extends IndividualComboBox {
 			while(results.hasNext())
 			{
 				
-				format = results.nextSolution().get("?inferenceEngine").toString();
+				format = results.nextSolution().get("?uri").toString();
 
 				String prettyName = stripURI(format);		
 				if(format == null || prettyName == null)
@@ -64,4 +90,45 @@ public class AgentComboBox extends IndividualComboBox {
 
 		this.setIndividuals(individuals);
 	}
+	
+public void queryInfernceEngineByWorkflow(String inferenceRuleURI){
+		
+		String getInferenceEngineQuery = "SELECT DISTINCT ?inferenceEngine ?inferenceEngineName " +
+				"WHERE { " +
+				"?inferenceEngine a <http://inference-web.org/2.0/pml-provenance.owl#InferenceEngine> . " +
+				"<" + inferenceRuleURI + "> <http://www.w3.org/2000/01/rdf-schema#subClassOf> ?method . " +
+				"?inferenceEngine <http://inference-web.org/2.0/pml-provenance.owl#hasInferenceEngineRule> ?method . " +
+				"?inferenceEngine <http://inference-web.org/2.0/pml-provenance.owl#hasName> ?inferenceEngineName . " +
+				"}";
+
+		edu.utep.trust.provenance.RDFStore_Service service = new edu.utep.trust.provenance.RDFStore_Service();
+		edu.utep.trust.provenance.RDFStore proxy = service.getRDFStoreHttpPort();
+		
+		String qResult = proxy.doQuery(getInferenceEngineQuery);
+		ResultSet rSet = ResultSetFactory.fromXML(qResult);
+		
+//		System.out.println(getInferenceEngineQuery);
+//		System.out.println(qResult);
+		
+		String inferenceEngineURI, inferenceEngineLabel;
+		
+		if(rSet != null)
+			while(rSet.hasNext()){
+				
+				QuerySolution QS = rSet.nextSolution();
+				inferenceEngineURI = QS.get("inferenceEngine").toString();
+				inferenceEngineLabel = QS.get("inferenceEngineName").toString();
+				
+				if(inferenceEngineLabel.contains("^^")){
+					inferenceEngineLabel = inferenceEngineLabel.substring(0, inferenceEngineLabel.indexOf("^^"));
+				}
+				
+				if(inferenceEngineURI != null && inferenceEngineLabel != null)
+					individuals.add(new Individual(inferenceRuleURI, inferenceEngineLabel, inferenceEngineURI));
+				
+			}
+		
+		this.setIndividuals(individuals);
+	}
+	
 }

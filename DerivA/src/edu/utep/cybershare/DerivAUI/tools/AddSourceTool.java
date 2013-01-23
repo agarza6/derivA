@@ -3,7 +3,11 @@ package edu.utep.cybershare.DerivAUI.tools;
 import javax.swing.*;
 
 import edu.utep.cybershare.DerivA.util.CIServerDump;
+import edu.utep.cybershare.DerivA.util.ServerCredentials;
 import edu.utep.cybershare.DerivAUI.DerivAUI;
+import edu.utep.cybershare.DerivAUI.components.IndividualList;
+import edu.utep.cybershare.DerivAUI.components.SourcesList;
+import edu.utep.cybershare.DerivAUI.components.IndividualList.Individual;
 import edu.utep.trust.provenance.RDFAggregater;
 import edu.utep.trust.provenance.RDFAggregater_Service;
 
@@ -11,6 +15,7 @@ import java.awt.Cursor;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Vector;
 
 /**
  *
@@ -21,6 +26,7 @@ public class AddSourceTool extends JFrame {
 
 	//Interface Components
 	public DerivAUI instance;
+	private ServerCredentials creds;
 
 	private javax.swing.JLabel AKALabel;
 	private javax.swing.JLabel AvailPeopleLabel;
@@ -68,31 +74,30 @@ public class AddSourceTool extends JFrame {
 	private javax.swing.JButton removeButton;
 	private javax.swing.JButton submitButton;
 
-	private javax.swing.JList jList1;
-	private javax.swing.JList jList2;
+	private IndividualList availPeopleList;
+	private IndividualList peopleIKnowList;
 	private javax.swing.JTabbedPane jTabbedPane1;
-	private javax.swing.JScrollPane availPeopleList;
-	private javax.swing.JScrollPane peopleIKnowList;
+	private javax.swing.JScrollPane availPeoplePane;
+	private javax.swing.JScrollPane peopleIKnowPane;
+
+	private Vector<edu.utep.cybershare.DerivAUI.components.IndividualList.Individual> availPeopleVector;
+	private Vector<edu.utep.cybershare.DerivAUI.components.IndividualList.Individual> peopleIKnowVector;
 
 	//Model variables
-	private String shortName, fullName, URL, CIProject, lname, fname;
-	private String uploaderName, uploaderPass;
+	private String shortName, fullName, lname, fname;
 	private String email, title, depiction, phone, homepage, workpage, projectpage, schoolpage, sha1Sum;
 	static String pmlp_url, OrgURL, memberOfURI,memberOfName;
 
 	// End of variables declaration
 
 	/** Creates new form addSourceTool */
-	public AddSourceTool(DerivAUI inst, String tURL, String project, String tUName, String tPass) {
+	public AddSourceTool(DerivAUI inst, ServerCredentials sc) {
 		instance = inst;
-		uploaderName = tUName;
-		uploaderPass = tPass;
-		URL = tURL;
-		CIProject = project;
+		creds = sc;
 		initComponents();
 	}
 
-	private void initComponents() {
+		private void initComponents() {
 
 		jTabbedPane1 = new javax.swing.JTabbedPane();
 		PersonalInfoPane = new javax.swing.JPanel();
@@ -123,12 +128,12 @@ public class AddSourceTool extends JFrame {
 		FriendsIKnowPane = new javax.swing.JPanel();
 		FoafMainLabel = new javax.swing.JLabel();
 		AvailPeopleLabel = new javax.swing.JLabel();
-		availPeopleList = new javax.swing.JScrollPane();
-		jList1 = new javax.swing.JList();
+		availPeoplePane = new javax.swing.JScrollPane();
+		availPeopleList = new IndividualList();
 		addButton = new javax.swing.JButton();
 		removeButton = new javax.swing.JButton();
-		peopleIKnowList = new javax.swing.JScrollPane();
-		jList2 = new javax.swing.JList();
+		peopleIKnowPane = new javax.swing.JScrollPane();
+		peopleIKnowList = new IndividualList();
 		peopleIKnowLabel = new javax.swing.JLabel();
 		someoneElseLabel = new javax.swing.JLabel();
 		someoneElseNameLabel = new javax.swing.JLabel();
@@ -141,19 +146,25 @@ public class AddSourceTool extends JFrame {
 		submitButton = new javax.swing.JButton();
 		cancelButton = new javax.swing.JButton();
 
+		availPeopleVector = new Vector<edu.utep.cybershare.DerivAUI.components.IndividualList.Individual>();
+		peopleIKnowVector = new Vector<edu.utep.cybershare.DerivAUI.components.IndividualList.Individual>();
+
 		newSouceLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
 		newSouceLabel.setText("Add New Source: Person");
 
-		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+		setTitle("derivA - Add New Person Tool");
+		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
 		newSouceLabel.setFont(new java.awt.Font("Tahoma", 1, 14));
 		newSouceLabel.setText("Add New Source: Person");
 
 		shortNameLabel.setText("Short Name (No spaces):");
+		shortNameTF.setEnabled(false);
 
 		firstNameLabel.setText("First Name:");
 
 		FOAFCheckBox.setText("Create FOAF (Friend of a Friend)");
+		FOAFCheckBox.setSelected(false);
 
 		emailLabel.setText("e-mail:");
 
@@ -303,36 +314,43 @@ public class AddSourceTool extends JFrame {
 
 		AvailPeopleLabel.setText("Available People");
 
-		jList1.setModel(new javax.swing.AbstractListModel() {
-			String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-			public int getSize() { return strings.length; }
-			public Object getElementAt(int i) { return strings[i]; }
+		availPeoplePane.setViewportView(availPeopleList);
+		availPeopleVector = new SourcesList().getSourceList();
+		availPeopleList.setModel(availPeopleVector);
+
+		peopleIKnowPane.setViewportView(peopleIKnowList);
+
+		addButton.setFont(new java.awt.Font("Tahoma", 1, 14));
+		addButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("../images/001_01.gif"))); // NOI18N
+		addButton.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				addAction(evt);
+			}
 		});
 
-		availPeopleList.setViewportView(jList1);
-
-		addButton.setText("Add");
-
-		removeButton.setText("Re");
-
-		jList2.setModel(new javax.swing.AbstractListModel() {
-			String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-			public int getSize() { return strings.length; }
-			public Object getElementAt(int i) { return strings[i]; }
+		removeButton.setFont(new java.awt.Font("Tahoma", 1, 14));
+		removeButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("../images/001_02.gif"))); // NOI18N
+		removeButton.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				removeAction(evt);
+			}
 		});
-		peopleIKnowList.setViewportView(jList2);
 
+		peopleIKnowPane.setViewportView(peopleIKnowList);
 		peopleIKnowLabel.setText("People You Know");
 
 		someoneElseLabel.setText("Add Someone You Know");
-
 		someoneElseNameLabel.setText("Name:");
-
 		someoneElseEmailLabel.setText("Email:");
-
+		someoneElseEmailTF.setEnabled(false);
 		someoneElseURLLabel.setText("FOAF URL:");
 
 		addSomeoneElse.setText("Add");
+		addSomeoneElse.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				addSomeoneElseAction(evt);
+			}
+		});
 
 		javax.swing.GroupLayout FriendsIKnowPaneLayout = new javax.swing.GroupLayout(FriendsIKnowPane);
 		FriendsIKnowPane.setLayout(FriendsIKnowPaneLayout);
@@ -346,7 +364,7 @@ public class AddSourceTool extends JFrame {
 												.addGroup(FriendsIKnowPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
 														.addComponent(FoafMainLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 														.addComponent(AvailPeopleLabel, javax.swing.GroupLayout.Alignment.LEADING))
-														.addComponent(availPeopleList, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
+														.addComponent(availPeoplePane, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
 														.addGap(10, 10, 10)
 														.addGroup(FriendsIKnowPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
 																.addComponent(addButton)
@@ -354,7 +372,7 @@ public class AddSourceTool extends JFrame {
 																.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
 																.addGroup(FriendsIKnowPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 																		.addComponent(peopleIKnowLabel)
-																		.addComponent(peopleIKnowList, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)))
+																		.addComponent(peopleIKnowPane, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)))
 																		.addComponent(someoneElseLabel)
 																		.addGroup(FriendsIKnowPaneLayout.createSequentialGroup()
 																				.addComponent(someoneElseNameLabel)
@@ -381,7 +399,7 @@ public class AddSourceTool extends JFrame {
 										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
 										.addComponent(AvailPeopleLabel)
 										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-										.addComponent(availPeopleList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+										.addComponent(availPeoplePane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
 										.addGroup(javax.swing.GroupLayout.Alignment.LEADING, FriendsIKnowPaneLayout.createSequentialGroup()
 												.addGap(36, 36, 36)
 												.addComponent(peopleIKnowLabel)
@@ -391,7 +409,7 @@ public class AddSourceTool extends JFrame {
 																.addComponent(addButton)
 																.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
 																.addComponent(removeButton))
-																.addComponent(peopleIKnowList, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE))))
+																.addComponent(peopleIKnowPane, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE))))
 																.addGap(18, 18, 18)
 																.addComponent(someoneElseLabel)
 																.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -413,9 +431,7 @@ public class AddSourceTool extends JFrame {
 
 		jTabbedPane1.addTab("Friends I Know", FriendsIKnowPane);
 
-		submitButton.setText("Sumbit");
-
-		cancelButton.setText("Cancel");
+		submitButton.setText("Submit");
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
@@ -445,9 +461,52 @@ public class AddSourceTool extends JFrame {
 				);
 
 		pack();
-		setLocationRelativeTo(null);
+		setLocationRelativeTo(instance);
 	}
 
+		public void addAction(java.awt.event.ActionEvent evt){
+			Object CSA = availPeopleList.getSelectedValue();
+			if(peopleIKnowVector != null){
+				if(!peopleIKnowVector.contains(CSA)){
+					peopleIKnowVector.add((edu.utep.cybershare.DerivAUI.components.IndividualList.Individual) CSA);
+				}
+			}else{
+				peopleIKnowVector = new Vector<edu.utep.cybershare.DerivAUI.components.IndividualList.Individual>();
+				peopleIKnowVector.add((edu.utep.cybershare.DerivAUI.components.IndividualList.Individual) CSA);
+			}
+
+			peopleIKnowList.setModel(peopleIKnowVector);
+			peopleIKnowList.repaint();
+
+		}
+
+		public void addSomeoneElseAction(java.awt.event.ActionEvent evt){
+			Individual someoneElse = peopleIKnowList.new Individual(someoneElseURLTF.getText(),someoneElseNameTF.getText(),someoneElseURLTF.getText());
+			if(peopleIKnowVector != null){
+				peopleIKnowVector.add(someoneElse);
+			}else{
+				peopleIKnowVector = new Vector<edu.utep.cybershare.DerivAUI.components.IndividualList.Individual>();
+				peopleIKnowVector.add(someoneElse);
+			}
+
+			someoneElseURLTF.setText("");
+			someoneElseNameTF.setText("");
+			peopleIKnowList.setModel(peopleIKnowVector);
+			peopleIKnowList.repaint();
+
+		}
+
+		public void removeAction(java.awt.event.ActionEvent evt){
+			Object CSA = peopleIKnowList.getSelectedValue();
+			if(peopleIKnowVector != null){
+				if(peopleIKnowVector.contains(CSA)){
+					peopleIKnowVector.remove(CSA);
+				}
+			}
+			peopleIKnowList.setModel(peopleIKnowVector);
+			peopleIKnowList.repaint();
+		}
+		
 	public void submitAction(java.awt.event.ActionEvent evt){
 
 		setCursor(new Cursor(Cursor.WAIT_CURSOR));
@@ -468,9 +527,9 @@ public class AddSourceTool extends JFrame {
 
 
 		//Upload data file to CI-Server
-		CIServerDump uploader = new CIServerDump(URL + "pmlp/", uploaderName, uploaderPass);
+		CIServerDump uploader = new CIServerDump(creds.getServerURL() + "pmlp/", creds.getUsername(), creds.getPassword());
 		byte[] resource_bytes = pmlP.getBytes();
-		String artifactURI = uploader.savePMLPToCIServer(shortName + ".owl", CIProject, resource_bytes, true);
+		String artifactURI = uploader.savePMLPToCIServer(shortName + ".owl", creds.getProject(), resource_bytes, true);
 
 		RDFAggregater_Service Service = new RDFAggregater_Service();
 		RDFAggregater proxy = Service.getRDFAggregaterHttpPort();
@@ -493,12 +552,12 @@ public class AddSourceTool extends JFrame {
 	}
 
 	public void cancelAction(java.awt.event.ActionEvent evt){
-		setVisible(false);
+		dispose();
 	}
 
 	private String getPML(){
 
-		String pmlp_url = URL + "pmlp/" + shortName + ".owl#" + shortName;
+		String pmlp_url = creds.getServerURL() + "pmlp/" + shortName + ".owl#" + shortName;
 
 		String pmlP = "<rdf:RDF" + '\n';
 		pmlP += '\t' + "xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'" + '\n';

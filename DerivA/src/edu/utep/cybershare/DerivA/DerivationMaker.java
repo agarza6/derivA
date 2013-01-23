@@ -17,9 +17,8 @@ import edu.utep.cybershare.ciclient.CIUtils;
 
 public class DerivationMaker {
 	
-	private String password, username;
-	private String CIProject;
-	private String CIServerPath;
+
+	private ServerCredentials creds;
 	private String dataFilePath;
 	private File file;
 	
@@ -28,11 +27,6 @@ public class DerivationMaker {
 	private Vector<Individual> antecedentURIs;
 	
 	public static final String DATE_FORMAT_NOW = "YYYY-MM-DDTHH:MM:SSZ";
-	
-	public void setUsername(String name){username = name;}
-	public void setUserPassword(String pass){password = pass;}
-	public void setCIProjectName(String name){CIProject = name;}
-	public void setCIServerPath(String path){CIServerPath = path;}
 	
 	public void setAgentURI(String URI){agentURI = URI;}
 	public void setInferenceRuleURI(String URI){inferenceRuleURI = URI;}
@@ -44,6 +38,10 @@ public class DerivationMaker {
 	public void setDataFilePath(String path){dataFilePath = path;}
 	public void setFile(File f){file = f;}
 	
+	public DerivationMaker(){}
+	public DerivationMaker(ServerCredentials sc){
+		creds = sc;
+	}
 	
 	public String getDateTime() {
 		Calendar cal = Calendar.getInstance();
@@ -51,12 +49,12 @@ public class DerivationMaker {
 		return sdf.format(cal.getTime());
 	}
 	
-	public void generateDerivation(){
+	public String generateDerivation(){
 		
-		NodeSetBuilder NSB = new NodeSetBuilder();
+		NodeSetBuilder NSB = new NodeSetBuilder(creds);
 		
 		//Upload data file to CI-Server
-		CIServerDump uploader = new CIServerDump(CIServerPath + "udata/", username, password);
+		CIServerDump uploader = new CIServerDump(creds.getServerURL() + "udata/", creds.getUsername(), creds.getPassword());
 		byte[] resource_bytes = null;
 
 		//			contents = GetURLContents.downloadText("file:\\"+dataFilePath);
@@ -69,12 +67,8 @@ public class DerivationMaker {
 
 		String dataFileName = dataFilePath.substring(dataFilePath.lastIndexOf('\\') + 1);
 		
-		conclusionURI = uploader.saveDataToCIServer(dataFileName, CIProject, resource_bytes, true);
-
-		System.out.println("conclusionURI: " + conclusionURI);
-		System.out.println("conclusionFormatURI: " + conclusionFormatURI);
+		conclusionURI = uploader.saveDataToCIServer(dataFileName, creds.getProject(), resource_bytes, true);
 		
-		NSB.projectName = CIProject;
 		NSB.artifactURI = conclusionURI;
 		NSB.formatURI = conclusionFormatURI;
 		NSB.docTypeURI = conclusionTypeURI;
@@ -84,7 +78,6 @@ public class DerivationMaker {
 		NSB.IRURI = inferenceRuleURI;
 		NSB.agentURI = agentURI;
 		NSB.fileName = dataFileName;
-		NSB.ServerURL = CIServerPath + "pmlj/";
 		
 		String pmljURI = NSB.derivateArtifact();
 		
@@ -102,6 +95,8 @@ public class DerivationMaker {
 		}else{
 			JOptionPane.showMessageDialog(null, "Aggregation Failed");
 		}
+		
+		return pmljURI;
 	}
 	
 }

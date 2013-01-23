@@ -1,23 +1,27 @@
 package edu.utep.cybershare.DerivAUI.components;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.ResultSetFactory;
 
+import edu.utep.cybershare.DerivAUI.components.IndividualComboBox.Individual;
+
 public class typeComboBox extends IndividualComboBox {
 	private static final long serialVersionUID = 1L;
 	private String ontology = null;
+	private Vector<Individual> individuals = new Vector<Individual>();
+	private ArrayList<String> antecedentTypeURI = new ArrayList<String>();
 	
 	public void setOntology(String Ont) {
 		ontology = Ont;
 	}
 	
-	public typeComboBox(boolean bol) {
+	public typeComboBox() {
 		super();
-		if(bol)
-			queryAgents();
+		queryInformationTypes();
 	}
 	
 	public static String stripURI(String formatURI)
@@ -28,7 +32,7 @@ public class typeComboBox extends IndividualComboBox {
 		return name;
 	}
 
-	public void queryAgents() {
+	public void queryInformationTypes() {
 		Vector<Individual> individuals = new Vector<Individual>();
 
 		edu.utep.trust.provenance.RDFStore_Service service = new edu.utep.trust.provenance.RDFStore_Service();
@@ -77,5 +81,75 @@ public class typeComboBox extends IndividualComboBox {
 
 		this.setIndividuals(individuals);
 	}
+	
+	public void queryNextInformationTypesByWorkflow(String inferenceRuleURI, String workflow){
+
+		String getNextConclusionTypeQuery = "SELECT DISTINCT ?conclusionType ?conclusionTypeName " +
+				"WHERE { " +
+//				"<" + inferenceRuleURI + "> <http://www.w3.org/2000/01/rdf-schema#subClassOf> ?method . " +
+				"<" + inferenceRuleURI + "> <http://trust.utep.edu/2.0/wdo.owl#hasOutput> ?conclusionType . " +
+				"?conclusionType <http://www.w3.org/2000/01/rdf-schema#subClassOf> ?conclusionDef . " +
+				"?conclusionDef <http://www.w3.org/2000/01/rdf-schema#label> ?conclusionTypeName . " +
+				"FILTER regex(str(?conclusionType), \"" + workflow + "\") " +
+				"}"; 
+
+		edu.utep.trust.provenance.RDFStore_Service service = new edu.utep.trust.provenance.RDFStore_Service();
+		edu.utep.trust.provenance.RDFStore proxy = service.getRDFStoreHttpPort();
+		
+		String qResult = proxy.doQuery(getNextConclusionTypeQuery);
+		ResultSet rSet = ResultSetFactory.fromXML(qResult);
+
+//		System.out.println(getNextConclusionTypeQuery);
+//		System.out.println(qResult);
+		
+		String conclusionTypeURI, conclusionTypeLabel;
+
+		if(rSet != null)
+			while(rSet.hasNext()){
+
+				QuerySolution QS = rSet.nextSolution();
+				conclusionTypeURI = QS.get("conclusionType").toString();
+				conclusionTypeLabel = QS.get("conclusionTypeName").toString();
+				
+				if(conclusionTypeLabel.contains("@")){
+					conclusionTypeLabel = conclusionTypeLabel.substring(0, conclusionTypeLabel.indexOf('@'));
+				}
+
+				individuals.add(new Individual(conclusionTypeURI, conclusionTypeLabel, conclusionTypeURI));
+
+			}
+
+		this.setIndividuals(individuals);
+
+	}
+	
+	public ArrayList<String> getAllAntecedentTypesFromInferenceRule(String inferenceRuleURI, String workflow){
+
+		String getNextConclusionTypeQuery = "SELECT DISTINCT ?antecedentType " +
+				"WHERE { " +
+				"<" + inferenceRuleURI + "> <http://trust.utep.edu/2.0/wdo.owl#hasInput> ?antecedentType . " +
+//				"?antecedentType <http://www.w3.org/2000/01/rdf-schema#subClassOf> ?antecedentTypeDef . " +
+				"FILTER regex(str(?antecedentType), \"" + workflow + "\") " +
+				"}"; 
+
+		edu.utep.trust.provenance.RDFStore_Service service = new edu.utep.trust.provenance.RDFStore_Service();
+		edu.utep.trust.provenance.RDFStore proxy = service.getRDFStoreHttpPort();
+		
+		String qResult = proxy.doQuery(getNextConclusionTypeQuery);
+		ResultSet rSet = ResultSetFactory.fromXML(qResult);
+
+//		System.out.println(getNextConclusionTypeQuery);
+//		System.out.println(qResult);
+
+		if(rSet != null)
+			while(rSet.hasNext()){
+
+				QuerySolution QS = rSet.nextSolution();
+				antecedentTypeURI.add(QS.get("antecedentType").toString());
+
+			}
+		return antecedentTypeURI;
+	}
+	
 }
 

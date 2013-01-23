@@ -10,18 +10,16 @@ import com.hp.hpl.jena.query.ResultSetFactory;
 public class formatComboBox extends IndividualComboBox {
 	private static final long serialVersionUID = 1L;
 	private HashMap<String,Integer> prettyNames = new HashMap<String,Integer>();
-	private String Ontology = null;
 	
 	public formatComboBox(boolean bol) {
 		super();
 		if(bol)
-			queryAgents();
+			queryFormats();
 	}
 	
-	public formatComboBox(String ont) {
+	public formatComboBox() {
 		super();
-		Ontology = ont;
-		queryAgents();
+		queryFormats();
 	}
 
 	
@@ -33,18 +31,14 @@ public class formatComboBox extends IndividualComboBox {
 		return name;
 	}
 
-	public void queryAgents() {
+	public void queryFormats() {
 		Vector<Individual> individuals = new Vector<Individual>();
 		
 		edu.utep.trust.provenance.RDFStore_Service service = new edu.utep.trust.provenance.RDFStore_Service();
 		edu.utep.trust.provenance.RDFStore proxy = service.getRDFStoreHttpPort();
 		
-		String formats = "";
-		if(Ontology == null)
-			formats = proxy.getFormats();
-		else
-			{}
-		
+		String formats = proxy.getFormats();
+
 		ResultSet results = ResultSetFactory.fromXML(formats);
 		
 //		System.out.println(formats);

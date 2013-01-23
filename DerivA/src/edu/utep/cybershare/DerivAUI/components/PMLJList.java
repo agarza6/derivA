@@ -7,11 +7,15 @@ import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.ResultSetFactory;
 
+import edu.utep.cybershare.DerivAUI.components.IndividualList.Individual;
+
 
 public class PMLJList extends IndividualList {
 
 	private Vector<Individual> individuals;
 
+	public PMLJList(){}
+	
 	public PMLJList(String project){
 		queryPMLJ(project);
 	}
@@ -33,8 +37,8 @@ public class PMLJList extends IndividualList {
 
 		ResultSet results = ResultSetFactory.fromXML(pml_j);
 
-		System.out.println(pml_j);
-		System.out.println(results);
+//		System.out.println(pml_j);
+//		System.out.println(results);
 
 		String conclusionName = "";
 		String conclusionURI = "";
@@ -65,6 +69,55 @@ public class PMLJList extends IndividualList {
 
 	}
 
+	public int queryAntecedentsByWorkflow(String conclusionTypeURI){
+
+		String getAllAntecedentsQuery =  "SELECT DISTINCT ?nodeset ?conclusionURL ?concType " +
+				"WHERE { " +
+				"?nodeset a <http://inference-web.org/2.0/pml-justification.owl#NodeSet> . " +
+				"<" + conclusionTypeURI + "> <http://www.w3.org/2000/01/rdf-schema#subClassOf> ?concType . " +
+				"?nodeset <http://inference-web.org/2.0/pml-justification.owl#hasConclusion> ?conclusion . " +
+				"?conclusion a ?concType. " +
+				"?conclusion <http://inference-web.org/2.0/pml-provenance.owl#hasURL> ?conclusionURL . " +
+				"FILTER (?concType != <http://inference-web.org/2.0/pml-provenance.owl#Information>) " +
+				"}";
+
+		edu.utep.trust.provenance.RDFStore_Service service = new edu.utep.trust.provenance.RDFStore_Service();
+		edu.utep.trust.provenance.RDFStore proxy = service.getRDFStoreHttpPort();
+		
+		String qResult = proxy.doQuery(getAllAntecedentsQuery);
+		ResultSet rSet = ResultSetFactory.fromXML(qResult);
+
+		System.out.println(getAllAntecedentsQuery);
+		System.out.println(qResult);
+		
+		String antecedentURI, antecedentLabel;
+		int count = 0;
+
+		if(rSet != null)
+			while(rSet.hasNext()){
+
+				QuerySolution QS = rSet.nextSolution();
+				antecedentURI = QS.get("nodeset").toString();
+				antecedentLabel = antecedentURI.substring(0, antecedentURI.indexOf('#'));;
+	
+				if(antecedentLabel.contains("^^")){
+					antecedentLabel = antecedentLabel.substring(0, antecedentLabel.indexOf("^^"));
+				}
+				
+				if(antecedentLabel.contains("/")){
+					if(antecedentLabel.lastIndexOf('/') == (antecedentLabel.length() - 1))
+						antecedentLabel = antecedentLabel.substring(0, antecedentLabel.length() - 1);
+					else
+						antecedentLabel = antecedentLabel.substring(antecedentLabel.lastIndexOf('/') + 1);
+				}
+
+				individuals.add(new Individual(antecedentURI, antecedentLabel, antecedentURI));
+				count++;
+
+			}
+		return count;
+	}
+	
 	public Vector<Individual> getPMLList(){return individuals;}
 
 }

@@ -34,7 +34,8 @@ public class OpenOntologyTool extends javax.swing.JFrame {
         fromURIRadioButton = new javax.swing.JRadioButton();
         URITF = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Open Ontology");
 
         openOntologyLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         openOntologyLabel.setText("Open Ontology");
@@ -186,7 +187,7 @@ public class OpenOntologyTool extends javax.swing.JFrame {
 	}
     
 	public void cancelAction(java.awt.event.ActionEvent evt){
-		setVisible(false);
+		dispose();
 	}
     
 	public void browseAction(java.awt.event.ActionEvent evt){

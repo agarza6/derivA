@@ -26,7 +26,8 @@ public class AggregaterTool extends javax.swing.JFrame {
         cancelButton = new javax.swing.JButton();
         submitButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Add to the Triple Store");
 
         enterURILabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         enterURILabel.setText("Enter Full URI");
@@ -77,7 +78,7 @@ public class AggregaterTool extends javax.swing.JFrame {
         );
 
         pack();
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(this);
     }
     
 	public void submitAction(java.awt.event.ActionEvent evt){
@@ -104,7 +105,7 @@ public class AggregaterTool extends javax.swing.JFrame {
 	}
 	
 	public void cancelAction(java.awt.event.ActionEvent evt){
-		setVisible(false);
+		dispose();
 	}
 
     // Variables declaration - do not modify

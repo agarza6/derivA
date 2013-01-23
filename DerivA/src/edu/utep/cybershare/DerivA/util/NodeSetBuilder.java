@@ -7,6 +7,7 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.inference_web.pml.v2.pmlp.IWAgent;
+import org.inference_web.pml.v2.pmlp.IWInferenceEngine;
 import org.inference_web.pml.v2.pmlp.IWInformation;
 import org.inference_web.pml.v2.util.PMLObjectManager;
 import org.inference_web.pml.v2.vocabulary.PMLP;
@@ -25,21 +26,26 @@ public class NodeSetBuilder {
 	public String artifactURI;
 	public String formatURI;
 	public String fileName;
+	
 
 	//Assertion Variables
 	public String dataFilePath;
 	public String dataFileName;
 	public String docTypeURI;
 
+	//Inference Engine Variables
+	public Vector<Individual> inferenceRuleVector;
+	
 	//Derivation Variables
 	public String agentURI, agentLabel;
 	public String IRURI, IRLabel;
 	public Vector<Individual> antecedentsURIs;
-	public String ServerURL, projectName;
 
-	public String username, password;
+	private ServerCredentials creds;
 
-
+	public NodeSetBuilder(){}
+	public NodeSetBuilder(ServerCredentials sc){creds = sc;}
+	
 	public String assertArtifact(){
 
 		GregorianCalendar gcal = new GregorianCalendar();
@@ -76,8 +82,8 @@ public class NodeSetBuilder {
 		String[] aSource = sources;
 		wtr.setSource(aSource);
 
-		System.out.println("serverURL: " + ServerURL);
-		String resultURI = wtr.writePML(ServerURL, projectName, username, password);
+		System.out.println("serverURL: " + creds.getServerURL());
+		String resultURI = wtr.writePML(creds.getServerURL(), creds.getProject(), creds.getUsername(), creds.getPassword());
 
 		return resultURI;
 	}
@@ -113,8 +119,8 @@ public class NodeSetBuilder {
 		wtr.setFileName(fileName);
 
 		//Set Paths
-		wtr.setBasePath(ServerURL);
-		wtr.setBaseURL(ServerURL);
+		wtr.setBasePath(creds.getServerURL());
+		wtr.setBaseURL(creds.getServerURL());
 
 		//Set Conclusion Information
 		//		wtr.setInformationByClass(docTypeURI);
@@ -129,32 +135,51 @@ public class NodeSetBuilder {
 		
 		wtr.setIdentifier();
 
-		String resultURI = wtr.writePML(ServerURL, projectName, username, password);
+		String resultURI = wtr.writePML(creds.getServerURL(), creds.getProject(), creds.getUsername(), creds.getPassword());
 
 		return resultURI;
 	}
 
 	public String createAgent(String id, String agentName,String description, String URL){
 		
-		IWAgent agent = (IWAgent)PMLObjectManager.createPMLObject(PMLP.Agent_lname);
-		
+		IWInferenceEngine agent = (IWInferenceEngine)PMLObjectManager.createPMLObject(PMLP.InferenceEngine_lname);
+
 		agent.setIdentifier(PMLObjectManager.getObjectID(id));
-	
+
+		agentName = agentName.replaceAll("&#xD;", "");
+		agentName = agentName.replaceAll("&#xA;", "");
+		agentName = agentName.replaceAll('\r' + "", "");
+		agentName = agentName.replaceAll('\n' + "", "");
+		agentName = agentName.replaceAll(" ", "_");
 		agent.setHasName(agentName);
-		
+
 		IWInformation info = (IWInformation)PMLObjectManager.createPMLObject(PMLP.Information_lname);
 		info.setHasRawString(description);
 		info.setHasLanguage("http://inference-web.org/registry/LG/English.owl#English");
-		info.setHasURL(URL);
 		
+		URL = URL.replaceAll("&#xD;", "");
+		URL = URL.replaceAll("&#xA;", "");
+		URL = URL.replaceAll('\r' + "", "");
+		URL = URL.replaceAll('\n' + "", "");
+		URL = URL.replaceAll(" ", "_");
+		info.setHasURL(URL);
 		agent.addHasDescription(info);
 		
-//		IWInferenceRule IR = (IWInferenceRule)PMLObjectManager.createPMLObject(PMLP.InferenceRule_lname);
-//		IR.setIdentifier(PMLObjectManager.getObjectID("http://someuri2.owl#uri"));
-//		IR.setHasName("SOMENAME");
-//		IR.setHasOwner(agent);
-//		PMLObjectManager.savePMLObject(IR, "c:/IR.owl");
+		Vector<String> IRURIs = new Vector<String>();
+		for(Iterator<Individual> iter = inferenceRuleVector.iterator(); iter.hasNext();){
+			Individual temp = iter.next();
+			IRURIs.add(temp.getURI());
+//			agent.addHasInferenceEngineRule(temp.getURI());
+		}
 		
+		agent.setHasInferenceEngineRule(IRURIs);
+
+		//		IWInferenceRule IR = (IWInferenceRule)PMLObjectManager.createPMLObject(PMLP.InferenceRule_lname);
+		//		IR.setIdentifier(PMLObjectManager.getObjectID("http://someuri2.owl#uri"));
+		//		IR.setHasName("SOMENAME");
+		//		IR.setHasOwner(agent);
+		//		PMLObjectManager.savePMLObject(IR, "c:/IR.owl");
+
 		String AgentString = PMLObjectManager.printPMLObjectToString(agent);
 		return AgentString;
 

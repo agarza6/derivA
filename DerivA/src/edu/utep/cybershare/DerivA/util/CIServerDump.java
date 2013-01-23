@@ -29,6 +29,15 @@ public class CIServerDump {
 		System.out.println(fileName);
 		try
 		{		
+			
+			System.out.println(" 8-- " + ciclient);
+			System.out.println(" 8-- " + projectName);
+			System.out.println(" 8-- " + fileName);
+			System.out.println(" 8-- " + contents.toString());
+			
+			
+			
+			
 			ro = CIPut.ciUploadFile(ciclient, projectName, fileName, contents, CIClient.UDATA_TYPE, true, Binary);
 
 			if(!ro.gStatus.equals("0")){
@@ -41,7 +50,7 @@ public class CIServerDump {
 			}  				
 		}
 		catch(Exception e){e.printStackTrace();}
-		System.out.println("---> " + CIGet.ciGetNewResourcePath(ciclient, fileName, CIClient.UDATA_TYPE));
+
 		return ro.gFileURL;
 	}
 
