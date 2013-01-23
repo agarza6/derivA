@@ -11,19 +11,23 @@ public class genericComboBox extends IndividualComboBox {
 
 	private static final long serialVersionUID = 1L;
 	private String query;
-	
+
 	public genericComboBox(String Q) {
 		super();
 		query = Q;
 		queryURIs(0);
 	}
-	
-	public static String stripURI(String formatURI)
+
+	public static String stripURI(String URI)
 	{
-		int start = formatURI.indexOf('#') + 1;
-		String name = formatURI.substring(start);
-		
-		return name;
+		if(URI.length() > 2){
+			int start = URI.lastIndexOf('/') + 1;
+			String name = URI.substring(start);
+
+			return name;
+		}else{
+			return null;
+		}
 	}
 
 	public void queryURIs(int selection) {
@@ -31,23 +35,23 @@ public class genericComboBox extends IndividualComboBox {
 
 		edu.utep.trust.provenance.RDFStore_Service service = new edu.utep.trust.provenance.RDFStore_Service();
 		edu.utep.trust.provenance.RDFStore proxy = service.getRDFStoreHttpPort();
-		
+
 		String qResult = proxy.doQuery(query);
-		
+
 		ResultSet results = ResultSetFactory.fromXML(qResult);
-		
-//		System.out.println(agents);
-//		System.out.println(results);
-		
+
+		System.out.println(qResult);
+		System.out.println(results);
+
 		String URI;
 
 		individuals.add(new Individual("Choose URI", " -- Choose URI -- ", "Choose URI"));
-		
+
 		// try web service and update local store	
 		if(results != null)
 			while(results.hasNext())
 			{
-				
+
 				URI = results.nextSolution().get("?URI").toString();
 
 				String prettyName = stripURI(URI);		
@@ -67,5 +71,5 @@ public class genericComboBox extends IndividualComboBox {
 
 		this.setIndividuals(individuals);
 	}
-	
+
 }
