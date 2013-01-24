@@ -358,21 +358,24 @@ public class WorkflowDriver extends javax.swing.JFrame {
 		System.out.println("conclusion Type: " + ConcType);
 		//Get Formats, IR, IE, Types for the next derivation
 		conclusionFormatComboBox.queryFormats();
-
+		
 		ArrayList<String> IR = inferenceRuleComboBox.queryInferenceRulesByWorkflow(ConcType, workflow);
 		ArrayList<String> antTypes = new ArrayList<String>();
-
+		
 		for(Iterator<String> iter = IR.iterator(); iter.hasNext();){
+			
 			String sIR = iter.next();
 			inferenceAgentComboBox.queryInfernceEngineByWorkflow(sIR);
 			conclusionTypeComboBox.queryNextInformationTypesByWorkflow(sIR, workflow);
 			antTypes = conclusionTypeComboBox.getAllAntecedentTypesFromInferenceRule(sIR, workflow);
 		}
-
+		
 		PMLJList ants = new PMLJList();
 
 		for(Iterator<String> iter = antTypes.iterator(); iter.hasNext();){
+			System.out.println("HERE 5, ITER: " + antTypes.size());
 			String temp = iter.next();
+			
 			if(ants.queryAntecedentsByWorkflow(temp) == 0){
 				Object[] options = {"Make Assertion","Procede"};
 				temp = temp.substring(temp.lastIndexOf('/'));
@@ -392,7 +395,7 @@ public class WorkflowDriver extends javax.swing.JFrame {
 				}
 			}
 		}
-
+		
 
 		AvailAntecedentsVector = ants.getPMLList();
 		availableAntecedentsList.setModel(AvailAntecedentsVector);
@@ -473,7 +476,9 @@ public class WorkflowDriver extends javax.swing.JFrame {
 
 		IndividualComboBox.Individual wf = (IndividualComboBox.Individual) availConclusionsComboBox.getSelectedItem();
 		conclusion = wf.getURI();
-
+		
+		System.out.println("Conclusion: " + conclusion);
+		
 		initComponents();
 
 	}

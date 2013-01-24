@@ -1136,7 +1136,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		IndividualComboBox.Individual agentInd = (IndividualComboBox.Individual) agentComboBox.getSelectedItem();
 		if(!agentInd.getName().equalsIgnoreCase(" -- Choose Agent -- ")){
 			Tabs.setIconAt(2, check);
-			inferenceRuleComboBox.queryInferenceRulesByInferenceEngine(agentInd.getURI());
+			//inferenceRuleComboBox.queryInferenceRulesByInferenceEngine(agentInd.getURI());
 		}else
 			Tabs.setIconAt(2,uncheck);
 	}
@@ -1363,6 +1363,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 			DM = new DerivationMaker(creds);
 
 			//set conclusion information
+			DM.setDataFilePath(filepath);
 			DM.setFile(new File(filepath));
 
 			DM.setConclusionFormatURI(formatURI);
@@ -1440,6 +1441,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 						JOptionPane.showMessageDialog(this, "Bad Username or Password", "Error", JOptionPane.ERROR_MESSAGE);
 						projectName = null;
 					}
+			
 					creds.setServerURL(path.substring(0, path.lastIndexOf('/') - 4));
 
 				}

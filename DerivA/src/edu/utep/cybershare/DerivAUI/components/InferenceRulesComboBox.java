@@ -165,6 +165,7 @@ public class InferenceRulesComboBox extends IndividualComboBox {
 					"FILTER (! regex(str(?ruleClass), \".*Thing.*\",\"i\")) . " +
 					"FILTER (! regex(str(?ruleClass), \".*Rule.*\",\"i\")) .}" +
 					"ORDER BY ?ruleLabel";
+			
 		}else{			
 			query = "SELECT DISTINCT ?inferenceRule ?ruleLabel ?ruleClass " +
 					"WHERE {" +
@@ -178,6 +179,7 @@ public class InferenceRulesComboBox extends IndividualComboBox {
 		}
 		
 		rules = proxy.doQuery(query);
+		//rules = proxy.getInferenceRulesWithInfo();
 		ResultSet results = ResultSetFactory.fromXML(rules);
 		
 //		System.out.println(rules);

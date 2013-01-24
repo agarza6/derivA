@@ -40,8 +40,8 @@ public class genericComboBox extends IndividualComboBox {
 
 		ResultSet results = ResultSetFactory.fromXML(qResult);
 
-		System.out.println(qResult);
-		System.out.println(results);
+		//System.out.println(qResult);
+		//System.out.println(results);
 
 		String URI;
 

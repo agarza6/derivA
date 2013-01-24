@@ -70,6 +70,7 @@ public class PMLJList extends IndividualList {
 	}
 
 	public int queryAntecedentsByWorkflow(String conclusionTypeURI){
+		individuals = new Vector<Individual>();
 
 		String getAllAntecedentsQuery =  "SELECT DISTINCT ?nodeset ?conclusionURL ?concType " +
 				"WHERE { " +
@@ -87,8 +88,8 @@ public class PMLJList extends IndividualList {
 		String qResult = proxy.doQuery(getAllAntecedentsQuery);
 		ResultSet rSet = ResultSetFactory.fromXML(qResult);
 
-		System.out.println(getAllAntecedentsQuery);
-		System.out.println(qResult);
+		//System.out.println(getAllAntecedentsQuery);
+		//System.out.println(qResult);
 		
 		String antecedentURI, antecedentLabel;
 		int count = 0;

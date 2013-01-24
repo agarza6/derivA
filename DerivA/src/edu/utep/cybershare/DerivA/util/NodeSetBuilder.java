@@ -83,7 +83,7 @@ public class NodeSetBuilder {
 		wtr.setSource(aSource);
 
 		System.out.println("serverURL: " + creds.getServerURL());
-		String resultURI = wtr.writePML(creds.getServerURL(), creds.getProject(), creds.getUsername(), creds.getPassword());
+		String resultURI = wtr.writePML(creds.getServerURL() + "pmlj/", creds.getProject(), creds.getUsername(), creds.getPassword());
 
 		return resultURI;
 	}
@@ -119,8 +119,8 @@ public class NodeSetBuilder {
 		wtr.setFileName(fileName);
 
 		//Set Paths
-		wtr.setBasePath(creds.getServerURL());
-		wtr.setBaseURL(creds.getServerURL());
+		wtr.setBasePath(creds.getServerURL() + "pmlj/");
+		wtr.setBaseURL(creds.getServerURL() + "pmlj/");
 
 		//Set Conclusion Information
 		//		wtr.setInformationByClass(docTypeURI);
@@ -135,7 +135,7 @@ public class NodeSetBuilder {
 		
 		wtr.setIdentifier();
 
-		String resultURI = wtr.writePML(creds.getServerURL(), creds.getProject(), creds.getUsername(), creds.getPassword());
+		String resultURI = wtr.writePML(creds.getServerURL() + "pmlj/", creds.getProject(), creds.getUsername(), creds.getPassword());
 
 		return resultURI;
 	}
