@@ -373,7 +373,7 @@ public class WorkflowDriver extends javax.swing.JFrame {
 		PMLJList ants = new PMLJList();
 
 		for(Iterator<String> iter = antTypes.iterator(); iter.hasNext();){
-			System.out.println("HERE 5, ITER: " + antTypes.size());
+			System.out.println("# of types: " + antTypes.size());
 			String temp = iter.next();
 			
 			if(ants.queryAntecedentsByWorkflow(temp) == 0){

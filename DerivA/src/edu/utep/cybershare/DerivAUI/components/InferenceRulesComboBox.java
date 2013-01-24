@@ -38,13 +38,13 @@ public class InferenceRulesComboBox extends IndividualComboBox {
 	public ArrayList<String> queryInferenceRulesByWorkflow(String conclusionTypeURI, String workflow){
 		Vector<Individual> individuals = new Vector<Individual>();
 
-		String getInferenceRuleQuery = "SELECT DISTINCT ?inferenceRule ?inferenceRuleName " + 
+		String getInferenceRuleQuery = "SELECT DISTINCT ?methodRule ?methodName " + 
 				"WHERE { " +
 				"?data <http://www.w3.org/2000/01/rdf-schema#subClassOf> <" + conclusionTypeURI + "> . " + 
-				"?data <http://trust.utep.edu/2.0/wdo.owl#isInputTo> ?inferenceRule . " +
-				"?inferenceRule <http://www.w3.org/2000/01/rdf-schema#subClassOf> ?MethodRule ." + 
-				"?MethodRule <http://www.w3.org/2000/01/rdf-schema#label> ?inferenceRuleName . " +
-				"FILTER regex(str(?inferenceRule), \"" + workflow + "\") " +
+				"?data <http://trust.utep.edu/2.0/wdo.owl#isInputTo> ?method . " +
+				"?method <http://www.w3.org/2000/01/rdf-schema#subClassOf> ?methodRule . " + 
+				"?methodRule <http://www.w3.org/2000/01/rdf-schema#label> ?methodName . " +
+				"FILTER regex(str(?methodRule),\"http://rio.cs.utep.edu/ciserver/ciprojects/wdo/.*\", \"i\")" +
 				"}";
 
 		edu.utep.trust.provenance.RDFStore_Service service = new edu.utep.trust.provenance.RDFStore_Service();
@@ -62,9 +62,9 @@ public class InferenceRulesComboBox extends IndividualComboBox {
 			while(rSet.hasNext()){
 
 				QuerySolution QS = rSet.nextSolution();
-				inferenceRuleURI = QS.get("inferenceRule").toString();
+				inferenceRuleURI = QS.get("methodRule").toString();
 				URIs.add(inferenceRuleURI);
-				inferenceRuleLabel = QS.get("inferenceRuleName").toString();
+				inferenceRuleLabel = QS.get("methodName").toString();
 
 				if(inferenceRuleLabel.contains("@")){
 					inferenceRuleLabel = inferenceRuleLabel.substring(0, inferenceRuleLabel.indexOf('@'));
