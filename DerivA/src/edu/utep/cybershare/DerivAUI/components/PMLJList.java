@@ -12,7 +12,7 @@ import edu.utep.cybershare.DerivAUI.components.IndividualList.Individual;
 
 public class PMLJList extends IndividualList {
 
-	private Vector<Individual> individuals;
+	private Vector<Individual> individuals = new Vector<Individual>();;
 
 	public PMLJList(){}
 	
@@ -70,7 +70,7 @@ public class PMLJList extends IndividualList {
 	}
 
 	public int queryAntecedentsByWorkflow(String conclusionTypeURI){
-		individuals = new Vector<Individual>();
+		
 
 		String getAllAntecedentsQuery =  "SELECT DISTINCT ?nodeset ?conclusionURL ?concType " +
 				"WHERE { " +
@@ -80,6 +80,7 @@ public class PMLJList extends IndividualList {
 				"?conclusion a ?concType. " +
 				"?conclusion <http://inference-web.org/2.0/pml-provenance.owl#hasURL> ?conclusionURL . " +
 				"FILTER (?concType != <http://inference-web.org/2.0/pml-provenance.owl#Information>) " +
+				"FILTER regex(str(?concType),\"http://rio.cs.utep.edu/ciserver/ciprojects/wdo/.*\", \"i\")" +
 				"}";
 
 		edu.utep.trust.provenance.RDFStore_Service service = new edu.utep.trust.provenance.RDFStore_Service();

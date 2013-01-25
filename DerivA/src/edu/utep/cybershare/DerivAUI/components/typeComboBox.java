@@ -93,6 +93,16 @@ public class typeComboBox extends IndividualComboBox {
 				"FILTER regex(str(?conclusionType), \"" + workflow + "\") " +
 				"}"; 
 
+		/*
+		 * SELECT DISTINCT ?conclusionType ?conclusionTypeName 
+WHERE { 
+<http://rio.cs.utep.edu/ciserver/ciprojects/saw/BasicPresentationSAW#m1-0> <http://trust.utep.edu/2.0/wdo.owl#hasOutput> ?conclusionType . 
+?conclusionType <http://www.w3.org/2000/01/rdf-schema#subClassOf> ?conclusionDef . 
+?conclusionDef <http://www.w3.org/2000/01/rdf-schema#label> ?conclusionTypeName . 
+FILTER regex(str(?methodRule),"http://rio.cs.utep.edu/ciserver/ciprojects/wdo/.*", "i") 
+}
+		 */
+		
 		edu.utep.trust.provenance.RDFStore_Service service = new edu.utep.trust.provenance.RDFStore_Service();
 		edu.utep.trust.provenance.RDFStore proxy = service.getRDFStoreHttpPort();
 		
@@ -127,7 +137,8 @@ public class typeComboBox extends IndividualComboBox {
 
 		String getNextConclusionTypeQuery = "SELECT DISTINCT ?antecedentType " +
 				"WHERE { " +
-				"<" + inferenceRuleURI + "> <http://trust.utep.edu/2.0/wdo.owl#hasInput> ?antecedentType . " +
+				"?subRule <http://www.w3.org/2000/01/rdf-schema#subClassOf> <" + inferenceRuleURI + "> ." +
+				"?subRule <http://trust.utep.edu/2.0/wdo.owl#hasInput> ?antecedentType . " +
 //				"?antecedentType <http://www.w3.org/2000/01/rdf-schema#subClassOf> ?antecedentTypeDef . " +
 				"FILTER regex(str(?antecedentType), \"" + workflow + "\") " +
 				"}"; 
