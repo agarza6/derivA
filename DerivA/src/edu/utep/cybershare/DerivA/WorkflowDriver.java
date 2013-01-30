@@ -26,7 +26,6 @@ import java.util.Vector;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
-import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.ResultSetFactory;
 
@@ -358,24 +357,24 @@ public class WorkflowDriver extends javax.swing.JFrame {
 		System.out.println("conclusion Type: " + ConcType);
 		//Get Formats, IR, IE, Types for the next derivation
 		conclusionFormatComboBox.queryFormats();
-		
+
 		ArrayList<String> IR = inferenceRuleComboBox.queryInferenceRulesByWorkflow(ConcType, workflow);
 		ArrayList<String> antTypes = new ArrayList<String>();
-		
+
 		for(Iterator<String> iter = IR.iterator(); iter.hasNext();){
-			
+
 			String sIR = iter.next();
 			inferenceAgentComboBox.queryInfernceEngineByWorkflow(sIR);
 			conclusionTypeComboBox.queryNextInformationTypesByWorkflow(sIR, workflow);
 			antTypes = conclusionTypeComboBox.getAllAntecedentTypesFromInferenceRule(sIR, workflow);
 		}
-		
+
 		PMLJList ants = new PMLJList();
 
 		for(Iterator<String> iter = antTypes.iterator(); iter.hasNext();){
 			System.out.println("# of types: " + antTypes.size());
 			String temp = iter.next();
-			
+
 			if(ants.queryAntecedentsByWorkflow(temp) == 0){
 				Object[] options = {"Make Assertion","Procede"};
 				temp = temp.substring(temp.lastIndexOf('/'));
@@ -395,7 +394,7 @@ public class WorkflowDriver extends javax.swing.JFrame {
 				}
 			}
 		}
-		
+
 
 		AvailAntecedentsVector = ants.getPMLList();
 		availableAntecedentsList.setModel(AvailAntecedentsVector);
@@ -474,28 +473,39 @@ public class WorkflowDriver extends javax.swing.JFrame {
 
 	public void submitColdStartAction(java.awt.event.ActionEvent evt){
 
+		setCursor(new Cursor(Cursor.WAIT_CURSOR));
+
 		IndividualComboBox.Individual wf = (IndividualComboBox.Individual) availConclusionsComboBox.getSelectedItem();
 		conclusion = wf.getURI();
-		
+
 		System.out.println("Conclusion: " + conclusion);
-		
+
 		initComponents();
+
+		setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 
 	}
 
 	public void submitAction(java.awt.event.ActionEvent evt){
-
+		setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
 		IndividualComboBox.Individual formatURI = (IndividualComboBox.Individual) conclusionFormatComboBox.getSelectedItem();
 		IndividualComboBox.Individual TypeURI = (IndividualComboBox.Individual) conclusionTypeComboBox.getSelectedItem();
 		IndividualComboBox.Individual InferenceAgentURI = (IndividualComboBox.Individual) inferenceAgentComboBox.getSelectedItem();
 		IndividualComboBox.Individual InferenceRuleURI = (IndividualComboBox.Individual) inferenceRuleComboBox.getSelectedItem();
 
+		String EngineURI = null;
+		if(InferenceAgentURI == null){
+			EngineURI = null;
+		}
+
 		setVisible(false);
 
-		instance.derivateArtifact(browseTextField.getText(), formatURI.getURI(),TypeURI.getURI(),InferenceAgentURI.getURI(),InferenceRuleURI.getURI(),CurrentlySelectedAntecedentsVector);
+		instance.derivateArtifact(browseTextField.getText(), formatURI.getURI(),TypeURI.getURI(),EngineURI,InferenceRuleURI.getURI(),CurrentlySelectedAntecedentsVector);
 
 		dispose();
+
+		setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
 
 	public void cancelAction(java.awt.event.ActionEvent evt){
@@ -524,15 +534,15 @@ public class WorkflowDriver extends javax.swing.JFrame {
 
 	public void removeAntecedentAction(java.awt.event.ActionEvent evt){
 		try{
-		Object CSA = selectedAntecedentsList.getSelectedValue();
-		if(CurrentlySelectedAntecedentsVector != null){
-			if(CurrentlySelectedAntecedentsVector.contains(CSA)){
-				CurrentlySelectedAntecedentsVector.remove(CSA);
+			Object CSA = selectedAntecedentsList.getSelectedValue();
+			if(CurrentlySelectedAntecedentsVector != null){
+				if(CurrentlySelectedAntecedentsVector.contains(CSA)){
+					CurrentlySelectedAntecedentsVector.remove(CSA);
+				}
 			}
-		}
 
-		selectedAntecedentsList.setModel(CurrentlySelectedAntecedentsVector);
-		selectedAntecedentsList.repaint();
+			selectedAntecedentsList.setModel(CurrentlySelectedAntecedentsVector);
+			selectedAntecedentsList.repaint();
 		}catch (Exception e){
 			JOptionPane.showMessageDialog(this, "Select Antecedent to Remove", "Error", JOptionPane.ERROR_MESSAGE);
 		}
@@ -570,7 +580,7 @@ public class WorkflowDriver extends javax.swing.JFrame {
 
 		edu.utep.trust.provenance.RDFStore_Service service = new edu.utep.trust.provenance.RDFStore_Service();
 		edu.utep.trust.provenance.RDFStore proxy = service.getRDFStoreHttpPort();
-		
+
 		String qResult = proxy.doQuery(getConclusionTypeQuery);
 		ResultSet rSet = ResultSetFactory.fromXML(qResult);
 
@@ -586,6 +596,24 @@ public class WorkflowDriver extends javax.swing.JFrame {
 			}
 
 		return conclusionTypeURI;
+	}
+
+	public boolean isFinalConclusion(String conclusion){
+
+		String getFinalConclusion = "SELECT ?method " +
+				"WHERE { " +
+				"< " + conclusion + "> <http://trust.utep.edu/2.0/wdo.owl#isInputTo> ?method . " +
+				"}";
+
+		edu.utep.trust.provenance.RDFStore_Service service = new edu.utep.trust.provenance.RDFStore_Service();
+		edu.utep.trust.provenance.RDFStore proxy = service.getRDFStoreHttpPort();
+		
+		String qResult = proxy.doQuery(getFinalConclusion);
+		ResultSet rSet = ResultSetFactory.fromXML(qResult);
+		
+		
+
+		return false;
 	}
 
 }

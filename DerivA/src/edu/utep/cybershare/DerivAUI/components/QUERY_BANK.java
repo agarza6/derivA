@@ -34,4 +34,12 @@ public class QUERY_BANK {
 			"FILTER regex(str(?concType),\"http://rio.cs.utep.edu/ciserver/ciprojects/wdo/.*\", \"i\")  " +
 			"}";
 	
+	public 	String getNextConclusionTypeQuery = "SELECT DISTINCT ?conclusionDef ?conclusionTypeName " +
+			"WHERE { " +
+			"<" + method + "> <http://trust.utep.edu/2.0/wdo.owl#hasOutput> ?conclusionType . " + 
+			"?conclusionType <http://www.w3.org/2000/01/rdf-schema#subClassOf> ?conclusionDef . " + 
+			"?conclusionDef <http://www.w3.org/2000/01/rdf-schema#label> ?conclusionTypeName . " + 
+			"FILTER regex(str(?conclusionDef),\"http://rio.cs.utep.edu/ciserver/ciprojects/wdo/.*\", \"i\") " +
+			"}"; 
+	
 }

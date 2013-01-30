@@ -126,7 +126,8 @@ public class NodeSetBuilder {
 		//		wtr.setInformationByClass(docTypeURI);
 		wtr.setInformation(docTypeURI);
 		wtr.setConclusionAsURL(artifactURI, formatURI);
-		wtr.setEngine(agentURI);
+		if(agentURI != null)
+			wtr.setEngine(agentURI);
 		wtr.setRule(IRURI);
 
 		//Set Time
