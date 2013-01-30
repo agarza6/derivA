@@ -72,10 +72,10 @@ public class AddAgentTool extends javax.swing.JFrame {
 		Selected_IR = new IndividualList();
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-		setTitle("Add Agent Tool");
+		setTitle("Create Actor Tool");
 
 		addAgentLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-		addAgentLabel.setText("Add New Agent");
+		addAgentLabel.setText("Add New Actor");
 
 		jScrollPane1.setViewportView(Avail_IR);
 		Avail_IR.setModel(Avail_IRVector);
@@ -96,9 +96,9 @@ public class AddAgentTool extends javax.swing.JFrame {
 			}
 		});
 		
-		addIRLabel.setText("Add Inference Rules to Agent");
+		addIRLabel.setText("Add Plan/Metho(s) to Actor");
 
-		addNameLabel.setText("Agent Name:");
+		addNameLabel.setText("Actor Name:");
         descriptionLabel.setText("Description:");
 
 		cancelButton.setText("Cancel");

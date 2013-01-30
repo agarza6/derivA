@@ -98,7 +98,11 @@ public class WorkflowDriver extends javax.swing.JFrame {
 		workflow = wf;
 
 		if(conclusion != null){
-			initComponents();
+			if(isFinalConclusion(conclusion)){
+				JOptionPane.showMessageDialog(this, "This was the Final Step of the Workflow. You will be automatically directed back to derivA", "Information", JOptionPane.INFORMATION_MESSAGE);
+			}else{
+				initComponents();
+			}
 		}else{
 			coldStartInit();
 		}
@@ -180,7 +184,7 @@ public class WorkflowDriver extends javax.swing.JFrame {
 		text3.setFont(new java.awt.Font("Tahoma", 1, 11));
 		text3.setText("Using");
 
-		inferenceAgentLabel.setText("Inference Agent: ");
+		inferenceAgentLabel.setText("Actor: ");
 
 		int IACount = inferenceAgentComboBox.getItemCount();
 		inferenceAgentsFound.setText("Found " + IACount);
@@ -188,7 +192,7 @@ public class WorkflowDriver extends javax.swing.JFrame {
 		text4.setFont(new java.awt.Font("Tahoma", 1, 11));
 		text4.setText("Executing");
 
-		inferenceRuleLabel.setText("Inference Rule:");
+		inferenceRuleLabel.setText("Plan/Method:");
 
 		int IRCount = inferenceRuleComboBox.getItemCount();
 		inferenceRulesFound.setText("Found " + IRCount);
@@ -478,10 +482,15 @@ public class WorkflowDriver extends javax.swing.JFrame {
 		IndividualComboBox.Individual wf = (IndividualComboBox.Individual) availConclusionsComboBox.getSelectedItem();
 		conclusion = wf.getURI();
 
-		System.out.println("Conclusion: " + conclusion);
+		if(isFinalConclusion(conclusion)){
+			JOptionPane.showMessageDialog(this, "This was the Final Step of the Workflow. You will be automatically directed back to derivA", "Information", JOptionPane.INFORMATION_MESSAGE);
+			dispose();
+		}else{
 
-		initComponents();
+			System.out.println("Conclusion: " + conclusion);
 
+			initComponents();
+		}
 		setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 
 	}
@@ -576,6 +585,7 @@ public class WorkflowDriver extends javax.swing.JFrame {
 				"<" + conclusion + "> a <http://inference-web.org/2.0/pml-justification.owl#NodeSet> . " +
 				"<" + conclusion + "> <http://inference-web.org/2.0/pml-justification.owl#hasConclusion> ?conclusion . " +
 				"?conclusion a ?conclusionType . " +
+				"FILTER regex(str(?conclusionType),\"wdo/.*\", \"i\")" +
 				"}";
 
 		edu.utep.trust.provenance.RDFStore_Service service = new edu.utep.trust.provenance.RDFStore_Service();
@@ -599,21 +609,38 @@ public class WorkflowDriver extends javax.swing.JFrame {
 	}
 
 	public boolean isFinalConclusion(String conclusion){
+		System.out.println("CHECK IF CONCLUSION IS FINAL");
+		String conclusionType = getConclusionTypeFromNode(conclusion);
 
-		String getFinalConclusion = "SELECT ?method " +
-				"WHERE { " +
-				"< " + conclusion + "> <http://trust.utep.edu/2.0/wdo.owl#isInputTo> ?method . " +
+		System.out.println("SECOND QUERY");
+		String getFinalConclusion = "SELECT DISTINCT ?method " +
+				"WHERE {  " +
+				"?type <http://www.w3.org/2000/01/rdf-schema#subClassOf> <" + conclusionType + "> . " +
+				"?type <http://trust.utep.edu/2.0/wdo.owl#isInputTo> ?method .  " +
+				"OPTIONAL { ?method2 <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://inference-web.org/2.0/pml-provenance.owl#Source> . FILTER(?method2 = ?method) } " +
+				"FILTER(!bound(?method2)) " +
 				"}";
 
 		edu.utep.trust.provenance.RDFStore_Service service = new edu.utep.trust.provenance.RDFStore_Service();
 		edu.utep.trust.provenance.RDFStore proxy = service.getRDFStoreHttpPort();
-		
+
 		String qResult = proxy.doQuery(getFinalConclusion);
 		ResultSet rSet = ResultSetFactory.fromXML(qResult);
-		
-		
+		int count = 0;
 
-		return false;
+		if(rSet != null){
+			while(rSet.hasNext()){
+				rSet.next();
+				count++;
+			}
+		}
+
+		System.out.println("COUNT ->: " + count);
+
+		if(count > 0)
+			return false;
+		else
+			return true;
 	}
 
 }

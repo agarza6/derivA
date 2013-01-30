@@ -64,23 +64,19 @@ public class PMLJList extends IndividualList {
 				if(conclusionName != null && conclusionName.length() > 1){
 					individuals.add(new Individual(conclusionURI, conclusionName, conclusionURI));
 				}
-
 			}
-
 	}
 
 	public int queryAntecedentsByWorkflow(String conclusionTypeURI){
 		
 
-		String getAllAntecedentsQuery =  "SELECT DISTINCT ?nodeset ?conclusionURL ?concType " +
+		String getAllAntecedentsQuery =  "SELECT DISTINCT ?nodeset " +
 				"WHERE { " +
-				"?nodeset a <http://inference-web.org/2.0/pml-justification.owl#NodeSet> . " +
 				"<" + conclusionTypeURI + "> <http://www.w3.org/2000/01/rdf-schema#subClassOf> ?concType . " +
-				"?nodeset <http://inference-web.org/2.0/pml-justification.owl#hasConclusion> ?conclusion . " +
 				"?conclusion a ?concType. " +
-				"?conclusion <http://inference-web.org/2.0/pml-provenance.owl#hasURL> ?conclusionURL . " +
-				"FILTER (?concType != <http://inference-web.org/2.0/pml-provenance.owl#Information>) " +
-				"FILTER regex(str(?concType),\"http://rio.cs.utep.edu/ciserver/ciprojects/wdo/.*\", \"i\")" +
+				"?nodeset <http://inference-web.org/2.0/pml-justification.owl#hasConclusion> ?conclusion . " +
+				"?nodeset a <http://inference-web.org/2.0/pml-justification.owl#NodeSet> . " +
+				"FILTER regex(str(?concType),\"wdo/.*\", \"i\")" +
 				"}";
 
 		edu.utep.trust.provenance.RDFStore_Service service = new edu.utep.trust.provenance.RDFStore_Service();

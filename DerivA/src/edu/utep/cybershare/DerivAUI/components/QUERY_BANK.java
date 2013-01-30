@@ -34,12 +34,29 @@ public class QUERY_BANK {
 			"FILTER regex(str(?concType),\"http://rio.cs.utep.edu/ciserver/ciprojects/wdo/.*\", \"i\")  " +
 			"}";
 	
-	public 	String getNextConclusionTypeQuery = "SELECT DISTINCT ?conclusionDef ?conclusionTypeName " +
+	public 	String GET_NXT_CONCLUSION_TYPE = "SELECT DISTINCT ?conclusionDef ?conclusionTypeName " +
 			"WHERE { " +
 			"<" + method + "> <http://trust.utep.edu/2.0/wdo.owl#hasOutput> ?conclusionType . " + 
 			"?conclusionType <http://www.w3.org/2000/01/rdf-schema#subClassOf> ?conclusionDef . " + 
 			"?conclusionDef <http://www.w3.org/2000/01/rdf-schema#label> ?conclusionTypeName . " + 
 			"FILTER regex(str(?conclusionDef),\"http://rio.cs.utep.edu/ciserver/ciprojects/wdo/.*\", \"i\") " +
 			"}"; 
+	
+	public String GET_ALL_ANTECEDENTS_BY_TYPE =  "SELECT DISTINCT ?nodeset " +
+			"WHERE { " +
+			"<" + type + "> <http://www.w3.org/2000/01/rdf-schema#subClassOf> ?concType . " +
+			"?conclusion a ?concType. " +
+			"?nodeset <http://inference-web.org/2.0/pml-justification.owl#hasConclusion> ?conclusion . " +
+			"?nodeset a <http://inference-web.org/2.0/pml-justification.owl#NodeSet> . " +
+			"FILTER regex(str(?concType),\"wdo/.*\", \"i\")" +
+			"}";
+	
+	public 	String IS_FINAL_CONCLUSION = "SELECT DISTINCT ?method " +
+			"WHERE {  " +
+			"?type <http://www.w3.org/2000/01/rdf-schema#subClassOf> <" + type + "> . " +
+			"?type <http://trust.utep.edu/2.0/wdo.owl#isInputTo> ?method .  " +
+			"OPTIONAL { ?method2 <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://inference-web.org/2.0/pml-provenance.owl#Source> . FILTER(?method2 = ?method) } " +
+			"FILTER(!bound(?method2)) " +
+			"}";
 	
 }

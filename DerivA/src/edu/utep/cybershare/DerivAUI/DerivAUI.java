@@ -124,10 +124,9 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 
 	//Buttons
 	private javax.swing.JButton conclusionBrowserButton;
-	private javax.swing.JButton AssertButton;
+	private javax.swing.JButton captureProvenanceButton;
 	private javax.swing.JButton addAntecedentButton;
 	private javax.swing.JButton removeAntecedentButton;
-	private javax.swing.JButton derivateButton;
 	private javax.swing.JButton assertArtifactModeButton;
 	private javax.swing.JButton derivateArtifactModeButton;
 	private javax.swing.JButton docArtifactModeButton;
@@ -260,7 +259,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		conclusionLabel = new javax.swing.JLabel();
 		fileFormatLabel = new javax.swing.JLabel();
 		fileTypeLabel = new javax.swing.JLabel();
-		AssertButton = new javax.swing.JButton();
+		captureProvenanceButton = new javax.swing.JButton();
 		conclusionFromTab = new javax.swing.JTabbedPane();
 		conclusionFromLocalTab = new javax.swing.JPanel();
 		localFileSystemLabel = new javax.swing.JLabel();
@@ -285,7 +284,6 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		removeAntecedentButton = new javax.swing.JButton();
 		availableAntecedentLabel = new javax.swing.JLabel();
 		currentlySelectedAntecedentLabel = new javax.swing.JLabel();
-		derivateButton = new javax.swing.JButton();
 		ProgressBar = new javax.swing.JProgressBar();
 		jMenuBar1 = new javax.swing.JMenuBar();
 		fileMenu = new javax.swing.JMenu();
@@ -336,7 +334,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		selectedWorkflowLabel.setText("none");
 
 		ModeLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
-		ModeLabel.setText("Select Mode");
+		ModeLabel.setText("Select Capture Mode");
 
 		assertArtifactModeButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("images/assert.png"))); // NOI18N
 		assertArtifactModeButton.addActionListener(new java.awt.event.ActionListener() {
@@ -371,24 +369,24 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		jPanel1Layout.setHorizontalGroup(
 				jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(jPanel1Layout.createSequentialGroup()
-						.addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-								.addComponent(ModeLabel)
+						.addComponent(ModeLabel)
+						.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+						.addGroup(jPanel1Layout.createSequentialGroup()
+								.addGap(56, 56, 56)
+								.addComponent(assertArtifactModeLabel)
+								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(DerivateArtifactModeLabel)
+								.addGap(104, 104, 104)
+								.addComponent(DocumentDerivationModeLabel)
+								.addGap(37, 37, 37))
 								.addGroup(jPanel1Layout.createSequentialGroup()
 										.addContainerGap()
 										.addComponent(assertArtifactModeButton)
-										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
 										.addComponent(derivateArtifactModeButton)
-										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-										.addComponent(docArtifactModeButton)))
-										.addContainerGap())
-										.addGroup(jPanel1Layout.createSequentialGroup()
-												.addGap(56, 56, 56)
-												.addComponent(assertArtifactModeLabel)
-												.addGap(97, 97, 97)
-												.addComponent(DerivateArtifactModeLabel)
-												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-												.addComponent(DocumentDerivationModeLabel)
-												.addGap(37, 37, 37))
+										.addGap(29, 29, 29)
+										.addComponent(docArtifactModeButton)
+										.addContainerGap(12, Short.MAX_VALUE))
 				);
 		jPanel1Layout.setVerticalGroup(
 				jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -412,30 +410,28 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		mainPanelLayout.setHorizontalGroup(
 				mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(mainPanelLayout.createSequentialGroup()
+						.addContainerGap()
 						.addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 								.addGroup(mainPanelLayout.createSequentialGroup()
-										.addContainerGap()
-										.addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+										.addGap(10, 10, 10)
+										.addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+										.addGroup(mainPanelLayout.createSequentialGroup()
+												.addComponent(ServerLabel)
+												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+												.addComponent(selectedServerLabel)
+												.addGap(18, 18, 18)
+												.addComponent(ProjectLabel)
+												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+												.addComponent(selectedProjectLabel))
 												.addGroup(mainPanelLayout.createSequentialGroup()
-														.addComponent(ServerLabel)
-														.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-														.addComponent(selectedServerLabel)
-														.addGap(18, 18, 18)
-														.addComponent(ProjectLabel)
-														.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-														.addComponent(selectedProjectLabel))
-														.addGroup(mainPanelLayout.createSequentialGroup()
+														.addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+																.addComponent(OntologyLabel)
+																.addComponent(WorkflowLabel))
+																.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 																.addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-																		.addComponent(OntologyLabel)
-																		.addComponent(WorkflowLabel))
-																		.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-																		.addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-																				.addComponent(selectedOntologyLabel)
-																				.addComponent(selectedWorkflowLabel)))))
-																				.addGroup(mainPanelLayout.createSequentialGroup()
-																						.addGap(32, 32, 32)
-																						.addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-																						.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+																		.addComponent(selectedOntologyLabel)
+																		.addComponent(selectedWorkflowLabel))))
+																		.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 				);
 		mainPanelLayout.setVerticalGroup(
 				mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -496,23 +492,26 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 				.addGroup(SourcesPanelLayout.createSequentialGroup()
 						.addContainerGap()
 						.addGroup(SourcesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-								.addComponent(SourcesLabel)
-								.addComponent(availableSourcesLabel)
 								.addGroup(SourcesPanelLayout.createSequentialGroup()
-										.addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
+										.addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
 										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 										.addGroup(SourcesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 												.addComponent(removeSourceButton, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addComponent(addSourceButton, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-												.addGap(6, 6, 6)
-												.addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE))
-												.addComponent(IncludeUserCheckBox))
-												.addContainerGap(15, Short.MAX_VALUE))
-												.addGroup(SourcesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-														.addGroup(SourcesPanelLayout.createSequentialGroup()
-																.addGap(316, 316, 316)
-																.addComponent(currentlySelectedSourcesLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-																.addContainerGap(99, Short.MAX_VALUE)))
+												.addComponent(addSourceButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+												.addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE))
+												.addGroup(SourcesPanelLayout.createSequentialGroup()
+														.addGroup(SourcesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+																.addComponent(SourcesLabel)
+																.addComponent(availableSourcesLabel)
+																.addComponent(IncludeUserCheckBox))
+																.addGap(0, 0, Short.MAX_VALUE)))
+																.addContainerGap())
+																.addGroup(SourcesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+																		.addGroup(SourcesPanelLayout.createSequentialGroup()
+																				.addGap(316, 316, 316)
+																				.addComponent(currentlySelectedSourcesLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+																				.addContainerGap(131, Short.MAX_VALUE)))
 				);
 		SourcesPanelLayout.setVerticalGroup(
 				SourcesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -521,7 +520,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 						.addComponent(addSourceButton)
 						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
 						.addComponent(removeSourceButton)
-						.addContainerGap(108, Short.MAX_VALUE))
+						.addContainerGap(93, Short.MAX_VALUE))
 						.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, SourcesPanelLayout.createSequentialGroup()
 								.addContainerGap()
 								.addComponent(SourcesLabel)
@@ -529,8 +528,8 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 								.addComponent(availableSourcesLabel)
 								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 								.addGroup(SourcesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-										.addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
-										.addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE))
+										.addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
+										.addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE))
 										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 										.addComponent(IncludeUserCheckBox)
 										.addGap(36, 36, 36))
@@ -538,7 +537,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 												.addGroup(SourcesPanelLayout.createSequentialGroup()
 														.addGap(34, 34, 34)
 														.addComponent(currentlySelectedSourcesLabel)
-														.addContainerGap(225, Short.MAX_VALUE)))
+														.addContainerGap(210, Short.MAX_VALUE)))
 				);
 
 		Tabs.addTab("Sources", SourceIcon, SourcesPanel);
@@ -550,10 +549,11 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 
 		fileTypeLabel.setText("File Format:");
 
-		AssertButton.setText("Assert Conclusion");
-		AssertButton.addActionListener(new java.awt.event.ActionListener() {
+		captureProvenanceButton.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+		captureProvenanceButton.setText("CAPTURE PROVENANCE");
+		captureProvenanceButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				assertAction(evt);
+				captureProvenanceAction(evt);
 			}
 		});
 
@@ -575,12 +575,14 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 				.addGroup(conclusionFromLocalTabLayout.createSequentialGroup()
 						.addContainerGap()
 						.addGroup(conclusionFromLocalTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-								.addComponent(localFileSystemLabel)
 								.addGroup(conclusionFromLocalTabLayout.createSequentialGroup()
-										.addComponent(conclusionBrowserButton)
-										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-										.addComponent(conclusionBrowserTF, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)))
-										.addContainerGap(285, Short.MAX_VALUE))
+										.addComponent(localFileSystemLabel)
+										.addGap(0, 372, Short.MAX_VALUE))
+										.addGroup(conclusionFromLocalTabLayout.createSequentialGroup()
+												.addComponent(conclusionBrowserButton)
+												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+												.addComponent(conclusionBrowserTF)))
+												.addContainerGap())
 				);
 		conclusionFromLocalTabLayout.setVerticalGroup(
 				conclusionFromLocalTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -609,7 +611,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 						.addGroup(conclusionFromServerTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 								.addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
 								.addComponent(fromServerLabel))
-								.addContainerGap(256, Short.MAX_VALUE))
+								.addContainerGap(302, Short.MAX_VALUE))
 				);
 		conclusionFromServerTabLayout.setVerticalGroup(
 				conclusionFromServerTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -634,7 +636,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 				.addGroup(conclusionFromURLTabLayout.createSequentialGroup()
 						.addContainerGap()
 						.addGroup(conclusionFromURLTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-								.addComponent(fromURLTF, javax.swing.GroupLayout.DEFAULT_SIZE, 520, Short.MAX_VALUE)
+								.addComponent(fromURLTF, javax.swing.GroupLayout.DEFAULT_SIZE, 566, Short.MAX_VALUE)
 								.addComponent(fromURLLabel))
 								.addContainerGap())
 				);
@@ -668,19 +670,20 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 				.addGroup(ConclusionPanelLayout.createSequentialGroup()
 						.addContainerGap()
 						.addGroup(ConclusionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-								.addComponent(conclusionLabel)
 								.addGroup(ConclusionPanelLayout.createSequentialGroup()
-										.addComponent(fileFormatLabel)
-										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-										.addComponent(conclusionTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-										.addGroup(ConclusionPanelLayout.createSequentialGroup()
-												.addComponent(fileTypeLabel)
-												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-												.addComponent(conclusionFormatComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-												.addGroup(ConclusionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-														.addComponent(AssertButton)
-														.addComponent(conclusionFromTab, javax.swing.GroupLayout.PREFERRED_SIZE, 545, javax.swing.GroupLayout.PREFERRED_SIZE)))
-														.addContainerGap(24, Short.MAX_VALUE))
+										.addGroup(ConclusionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+												.addComponent(conclusionLabel)
+												.addGroup(ConclusionPanelLayout.createSequentialGroup()
+														.addComponent(fileFormatLabel)
+														.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+														.addComponent(conclusionTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+														.addGroup(ConclusionPanelLayout.createSequentialGroup()
+																.addComponent(fileTypeLabel)
+																.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+																.addComponent(conclusionFormatComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+																.addGap(0, 0, Short.MAX_VALUE))
+																.addComponent(conclusionFromTab, javax.swing.GroupLayout.Alignment.TRAILING))
+																.addContainerGap())
 				);
 		ConclusionPanelLayout.setVerticalGroup(
 				ConclusionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -697,15 +700,13 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 										.addComponent(conclusionFormatComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
 										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 										.addComponent(conclusionFromTab)
-										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-										.addComponent(AssertButton)
-										.addContainerGap())
+										.addGap(25, 25, 25))
 				);
 
 		Tabs.addTab("Conclusion", ConclusionIcon, ConclusionPanel);
 
 		InferenceAgentLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
-		InferenceAgentLabel.setText("Select an Method's Agent");
+		InferenceAgentLabel.setText("Select an Actor");
 		agentComboBox.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				changeIACheckStatus(evt);
@@ -728,16 +729,13 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 				.addGroup(IAgentPanelLayout.createSequentialGroup()
 						.addContainerGap()
 						.addGroup(IAgentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+								.addComponent(agentComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addComponent(InferenceAgentLabel)
 								.addGroup(IAgentPanelLayout.createSequentialGroup()
-										.addGroup(IAgentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-												.addComponent(InferenceAgentLabel)
-												.addGroup(IAgentPanelLayout.createSequentialGroup()
-														.addComponent(IASortByLabel)
-														.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-														.addComponent(IATypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-														.addGap(0, 469, Short.MAX_VALUE))
-														.addComponent(agentComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-														.addContainerGap())
+										.addComponent(IASortByLabel)
+										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+										.addComponent(IATypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+										.addContainerGap(433, Short.MAX_VALUE))
 				);
 		IAgentPanelLayout.setVerticalGroup(
 				IAgentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -750,13 +748,13 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 								.addComponent(IATypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
 								.addGap(9, 9, 9)
 								.addComponent(agentComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-								.addContainerGap(187, Short.MAX_VALUE))
+								.addContainerGap(172, Short.MAX_VALUE))
 				);
 
-		Tabs.addTab("Engine", IAIcon, IAgentPanel);
+		Tabs.addTab("Actor", IAIcon, IAgentPanel);
 		InferenceRuleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
 
-		InferenceRuleLabel.setText("Select Method");
+		InferenceRuleLabel.setText("Select Plan/Method");
 		inferenceRuleComboBox.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				changeIRCheckStatus(evt);
@@ -770,9 +768,9 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 				.addGroup(IRulePanelLayout.createSequentialGroup()
 						.addContainerGap()
 						.addGroup(IRulePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-								.addComponent(inferenceRuleComboBox, 0, 557, Short.MAX_VALUE)
-								.addComponent(InferenceRuleLabel))
-								.addContainerGap())
+								.addComponent(InferenceRuleLabel)
+								.addComponent(inferenceRuleComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
+								.addContainerGap(396, Short.MAX_VALUE))
 				);
 		IRulePanelLayout.setVerticalGroup(
 				IRulePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -781,10 +779,10 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 						.addComponent(InferenceRuleLabel)
 						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 						.addComponent(inferenceRuleComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(221, Short.MAX_VALUE))
+						.addContainerGap(206, Short.MAX_VALUE))
 				);
 
-		Tabs.addTab("Method", IRIcon, IRulePanel);
+		Tabs.addTab("Plan/Method", IRIcon, IRulePanel);
 
 
 		AntecedentLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
@@ -821,13 +819,6 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		currentlySelectedAntecedentLabel.setText("Currently Selected Artifacts");
 		jScrollPane3.setViewportView(currentlySelectedAntecedentList);
 
-		derivateButton.setText("Derivate");
-		derivateButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				derivateAction(evt);
-			}
-		});
-
 		javax.swing.GroupLayout AntecedentPanelLayout = new javax.swing.GroupLayout(AntecedentPanel);
 		AntecedentPanel.setLayout(AntecedentPanelLayout);
 		AntecedentPanelLayout.setHorizontalGroup(
@@ -835,13 +826,12 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 				.addGroup(AntecedentPanelLayout.createSequentialGroup()
 						.addContainerGap()
 						.addGroup(AntecedentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-								.addComponent(AntecedentLabel)
 								.addGroup(AntecedentPanelLayout.createSequentialGroup()
 										.addGroup(AntecedentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 												.addGroup(AntecedentPanelLayout.createSequentialGroup()
 														.addGroup(AntecedentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 																.addComponent(availableAntecedentLabel)
-																.addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE))
+																.addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
 																.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 																.addGroup(AntecedentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
 																		.addComponent(removeAntecedentButton, 0, 0, Short.MAX_VALUE)
@@ -850,13 +840,13 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 																		.addGroup(AntecedentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 																				.addGroup(AntecedentPanelLayout.createSequentialGroup()
 																						.addGap(10, 10, 10)
-																						.addComponent(currentlySelectedAntecedentLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
-																						.addGroup(AntecedentPanelLayout.createSequentialGroup()
+																						.addComponent(currentlySelectedAntecedentLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+																						.addGap(0, 105, Short.MAX_VALUE))
+																						.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, AntecedentPanelLayout.createSequentialGroup()
 																								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-																								.addGroup(AntecedentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-																										.addComponent(derivateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-																										.addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-																										.addGap(13, 13, 13))
+																								.addComponent(jScrollPane3))))
+																								.addComponent(AntecedentLabel))
+																								.addContainerGap())
 				);
 		AntecedentPanelLayout.setVerticalGroup(
 				AntecedentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -880,9 +870,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 																.addComponent(addAntecedentButton)
 																.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
 																.addComponent(removeAntecedentButton)))
-																.addGap(1, 1, 1)
-																.addComponent(derivateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-																.addGap(39, 39, 39))
+																.addGap(66, 66, 66))
 				);
 
 		Tabs.addTab("Derived From", AntecedentIcon, AntecedentPanel);
@@ -921,7 +909,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 
 		ToolsMenu.setText("Tools");
 
-		tripleStoreAggregater.setText("Triple Store Aggregater");
+		tripleStoreAggregater.setText("Add Conclusion to Triple Store");
 		tripleStoreAggregater.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				aggregateToolAction(evt);
@@ -929,7 +917,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		});
 		ToolsMenu.add(tripleStoreAggregater);
 
-		addSourceTool.setText("Add New Person");
+		addSourceTool.setText("Create New Person Entity");
 		addSourceTool.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				addSourceToolAction(evt);
@@ -937,7 +925,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		});
 		ToolsMenu.add(addSourceTool);
 
-		addAgentTool.setText("Add New Inference Engine");
+		addAgentTool.setText("Create New Actor");
 		addAgentTool.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				addAgentToolAction(evt);
@@ -945,7 +933,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		});
 		ToolsMenu.add(addAgentTool);
 
-		addFormatTool.setText("Add New Format");
+		addFormatTool.setText("Create New Format");
 		addFormatTool.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				addFormatToolAction(evt);
@@ -973,22 +961,25 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		getContentPane().setLayout(layout);
 		layout.setHorizontalGroup(
 				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup()
+				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
 						.addContainerGap()
-						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-								.addComponent(ProgressBar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+								.addComponent(mainPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 								.addComponent(Tabs, javax.swing.GroupLayout.Alignment.LEADING)
-								.addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-								.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+								.addComponent(ProgressBar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(captureProvenanceButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+								.addContainerGap())
 				);
 		layout.setVerticalGroup(
 				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
 						.addContainerGap()
-						.addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
+						.addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
 						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-						.addComponent(Tabs, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
-						.addGap(1, 1, 1)
+						.addComponent(Tabs, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+						.addComponent(captureProvenanceButton, javax.swing.GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE)
+						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 						.addComponent(ProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
 						.addContainerGap())
 				);
@@ -1007,7 +998,6 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 
 		conclusionList.setEnabled(false);
 		conclusionBrowserButton.setEnabled(true);
-		AssertButton.setEnabled(true);
 	}
 
 	public void aboutAction(java.awt.event.ActionEvent evt){
@@ -1028,7 +1018,8 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 
 		conclusionList.setEnabled(false);
 		conclusionBrowserButton.setEnabled(true);
-		AssertButton.setEnabled(true);
+
+		captureProvenanceButton.setText("ASSERT ARTIFACT!");
 
 		if(Tabs.getSelectedIndex() > 1)
 			Tabs.setSelectedIndex(0);
@@ -1045,7 +1036,8 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 
 		conclusionList.setEnabled(false);
 		conclusionBrowserButton.setEnabled(true);
-		AssertButton.setEnabled(false);
+
+		captureProvenanceButton.setText("DERIVE ARTIFACT!");
 
 		if(Tabs.getSelectedIndex() == 0)
 			Tabs.setSelectedIndex(1);
@@ -1062,7 +1054,6 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 
 		conclusionList.setEnabled(true);
 		conclusionBrowserButton.setEnabled(false);
-		AssertButton.setEnabled(false);
 
 		if(Tabs.getSelectedIndex() == 0)
 			Tabs.setSelectedIndex(1);
@@ -1173,11 +1164,18 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 	 * ASSERT ARTIFACT Event Call
 	 * @param evt
 	 */
-	public void assertAction(java.awt.event.ActionEvent evt){
+	public void captureProvenanceAction(java.awt.event.ActionEvent evt){
 
-		assertTask = new assertTask();
-		assertTask.addPropertyChangeListener(this);
-		assertTask.execute();
+		if(MODE == ASSERT_MODE){
+			assertTask = new assertTask();
+			assertTask.addPropertyChangeListener(this);
+			assertTask.execute();
+		}else if(MODE == DERIVATE_MODE){
+			deriveTask = new deriveTask();
+			deriveTask.addPropertyChangeListener(this);
+			deriveTask.execute();
+		}
+
 	}
 
 	public void assertArtifact(Vector<IndividualList.Individual> sources, String typeURI, String formatURI){
@@ -1349,9 +1347,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 	 */
 	public void derivateAction(java.awt.event.ActionEvent evt){
 
-		deriveTask = new deriveTask();
-		deriveTask.addPropertyChangeListener(this);
-		deriveTask.execute();
+
 	}
 
 	public void derivateArtifact(String filepath, String formatURI, String typeURI, String InfEngine, String InfRule, Vector<IndividualList.Individual> ants){
@@ -1441,7 +1437,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 						JOptionPane.showMessageDialog(this, "Bad Username or Password", "Error", JOptionPane.ERROR_MESSAGE);
 						projectName = null;
 					}
-			
+
 					creds.setServerURL(path.substring(0, path.lastIndexOf('/') - 4));
 
 				}
