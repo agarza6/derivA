@@ -1407,8 +1407,8 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 
 	}
 
-	/**
-	 * The purpose of this method is not actually login in to CI Server, but acquiring correct
+	/** CI-Server LOGIN
+	 * The purpose of this method is not actually login to CI Server, but acquiring correct
 	 * details about the login session (Server URL, valid username and password, and project Name).
 	 */
 	public void serverLogin() {

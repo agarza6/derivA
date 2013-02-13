@@ -20,7 +20,14 @@ package edu.utep.cybershare.DerivAUI.tools;
 import java.awt.Cursor;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
@@ -36,181 +43,212 @@ import edu.utep.cybershare.DerivAUI.components.*;
  */
 public class OpenWorkflowTool extends javax.swing.JFrame {
 
-    /** Creates new form openOntology */
-    public OpenWorkflowTool(DerivAUI inst, ServerCredentials sc, WorkflowDriver wd) {
-    	instance = inst;
-    	creds = sc;
-    	Driver = wd;
-        initComponents();
-    }
+	/** Creates new form openOntology */
+	public OpenWorkflowTool(DerivAUI inst, ServerCredentials sc, WorkflowDriver wd) {
+		instance = inst;
+		creds = sc;
+		Driver = wd;
+		initComponents();
+	}
 
-    private void initComponents() {
+	private void initComponents() {
 
-        ButtonGroup = new javax.swing.ButtonGroup();
-        openOntologyLabel = new javax.swing.JLabel();
-        fromLocalRadioButton = new javax.swing.JRadioButton();
-        browseButton = new javax.swing.JButton();
-        LocalTF = new javax.swing.JTextField();
-        fromServerRadioButton = new javax.swing.JRadioButton();
-        WFComboBox = new genericComboBox(new QUERY_BANK().GET_WORKFLOWS_QUERY);
-        cancelButton = new javax.swing.JButton();
-        submitButton = new javax.swing.JButton();
-        fromURIRadioButton = new javax.swing.JRadioButton();
-        URITF = new javax.swing.JTextField();
+		ButtonGroup = new javax.swing.ButtonGroup();
+		openOntologyLabel = new javax.swing.JLabel();
+		fromLocalRadioButton = new javax.swing.JRadioButton();
+		browseButton = new javax.swing.JButton();
+		LocalTF = new javax.swing.JTextField();
+		fromServerRadioButton = new javax.swing.JRadioButton();
+		WFComboBox = new genericComboBox(new QUERY_BANK().GET_WORKFLOWS_QUERY);
+		cancelButton = new javax.swing.JButton();
+		submitButton = new javax.swing.JButton();
+		fromURIRadioButton = new javax.swing.JRadioButton();
+		URITF = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Select Workflow");
+		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+		setTitle("Select Workflow");
 
-        openOntologyLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        openOntologyLabel.setText("Open Workflow");
+		openOntologyLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+		openOntologyLabel.setText("Open Workflow");
 
-        fromLocalRadioButton.setText("From Local File System (Not Available)");
-        fromLocalRadioButton.addActionListener(new java.awt.event.ActionListener() {
+		fromLocalRadioButton.setText("From Local File System (Not Available)");
+		fromLocalRadioButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				fromLocalAction(evt);
 			}
 		});
 
-        browseButton.setText("Browse");
-        browseButton.addActionListener(new java.awt.event.ActionListener() {
+		browseButton.setText("Browse");
+		browseButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				browseAction(evt);
 			}
 		});
 
-        fromServerRadioButton.setText("Available in Project");
-        fromServerRadioButton.setSelected(true);
-        fromServerRadioButton.addActionListener(new java.awt.event.ActionListener() {
+		fromServerRadioButton.setText("Available in Project");
+		fromServerRadioButton.setSelected(true);
+		fromServerRadioButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				fromLocalAction(evt);
 			}
 		});
 
-        cancelButton.setText("Close");
-        cancelButton.addActionListener(new java.awt.event.ActionListener() {
-          public void actionPerformed(java.awt.event.ActionEvent evt) {
-            cancelAction(evt);
-          }
-        });
+		cancelButton.setText("Close");
+		cancelButton.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				cancelAction(evt);
+			}
+		});
 
-        submitButton.setText("Submit");
-        submitButton.addActionListener(new java.awt.event.ActionListener() {
+		submitButton.setText("Submit");
+		submitButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				submitAction(evt);
 			}
 		});
 
-        fromURIRadioButton.setText("From URI");
-        fromURIRadioButton.addActionListener(new java.awt.event.ActionListener() {
+		fromURIRadioButton.setText("From URI");
+		fromURIRadioButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				fromLocalAction(evt);
 			}
 		});
 
-        URITF.setText("http://");
-        
-        ButtonGroup.add(fromServerRadioButton);
-        ButtonGroup.add(fromLocalRadioButton);
-        ButtonGroup.add(fromURIRadioButton);
+		URITF.setText("http://");
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(WFComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(fromServerRadioButton)
-                    .addComponent(fromLocalRadioButton)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(URITF, javax.swing.GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE))
-                    .addComponent(fromURIRadioButton)
-                    .addComponent(openOntologyLabel)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(submitButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cancelButton))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(browseButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(LocalTF, javax.swing.GroupLayout.DEFAULT_SIZE, 318, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(openOntologyLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(fromURIRadioButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(URITF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(fromLocalRadioButton)
-                .addGap(1, 1, 1)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(browseButton)
-                    .addComponent(LocalTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(fromServerRadioButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(WFComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cancelButton)
-                    .addComponent(submitButton))
-                .addContainerGap())
-        );
+		ButtonGroup.add(fromServerRadioButton);
+		ButtonGroup.add(fromLocalRadioButton);
+		ButtonGroup.add(fromURIRadioButton);
 
-	    LocalTF.setEnabled(false);
-	    WFComboBox.setEnabled(true);
-	    browseButton.setEnabled(false);
-	    fromLocalRadioButton.setEnabled(false);
-        
-        pack();
-        setLocationRelativeTo(instance);
-    }
-    
+		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+		getContentPane().setLayout(layout);
+		layout.setHorizontalGroup(
+				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup()
+						.addContainerGap()
+						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(layout.createSequentialGroup()
+										.addGap(20, 20, 20)
+										.addComponent(WFComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+										.addComponent(fromServerRadioButton)
+										.addComponent(fromLocalRadioButton)
+										.addGroup(layout.createSequentialGroup()
+												.addGap(20, 20, 20)
+												.addComponent(URITF, javax.swing.GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE))
+												.addComponent(fromURIRadioButton)
+												.addComponent(openOntologyLabel)
+												.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+														.addComponent(submitButton)
+														.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+														.addComponent(cancelButton))
+														.addGroup(layout.createSequentialGroup()
+																.addGap(20, 20, 20)
+																.addComponent(browseButton)
+																.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+																.addComponent(LocalTF, javax.swing.GroupLayout.DEFAULT_SIZE, 318, Short.MAX_VALUE)))
+																.addContainerGap())
+				);
+		layout.setVerticalGroup(
+				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup()
+						.addContainerGap()
+						.addComponent(openOntologyLabel)
+						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+						.addComponent(fromURIRadioButton)
+						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+						.addComponent(URITF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+						.addComponent(fromLocalRadioButton)
+						.addGap(1, 1, 1)
+						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+								.addComponent(browseButton)
+								.addComponent(LocalTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+								.addComponent(fromServerRadioButton)
+								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+								.addComponent(WFComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+										.addComponent(cancelButton)
+										.addComponent(submitButton))
+										.addContainerGap())
+				);
+
+		LocalTF.setEnabled(false);
+		WFComboBox.setEnabled(true);
+		browseButton.setEnabled(false);
+		fromLocalRadioButton.setEnabled(false);
+
+		pack();
+		setLocationRelativeTo(instance);
+	}
+
 	public void fromLocalAction(java.awt.event.ActionEvent evt){
-//	    LocalTF.setEnabled(true);
-//	    OntologyComboBox.setEnabled(false);
-//	    URITF.setEnabled(false);
-//	    browseButton.setEnabled(true);
+		//	    LocalTF.setEnabled(true);
+		//	    OntologyComboBox.setEnabled(false);
+		//	    URITF.setEnabled(false);
+		//	    browseButton.setEnabled(true);
 	}
-	
+
 	public void fromServerAction(java.awt.event.ActionEvent evt){
-	    LocalTF.setEnabled(false);
-	    WFComboBox.setEnabled(true);
-	    URITF.setEnabled(false);
-	    browseButton.setEnabled(false);
+		LocalTF.setEnabled(false);
+		WFComboBox.setEnabled(true);
+		URITF.setEnabled(false);
+		browseButton.setEnabled(false);
 	}
-	
+
 	public void fromURIAction(java.awt.event.ActionEvent evt){
-//	    LocalTF.setEnabled(false);
-//	    OntologyComboBox.setEnabled(false);
-//	    URITF.setEnabled(true);
-//	    browseButton.setEnabled(false);
+		//	    LocalTF.setEnabled(false);
+		//	    OntologyComboBox.setEnabled(false);
+		//	    URITF.setEnabled(true);
+		//	    browseButton.setEnabled(false);
 	}
 
 	public void submitAction(java.awt.event.ActionEvent evt){
-	
+
 		IndividualComboBox.Individual wf = (IndividualComboBox.Individual) WFComboBox.getSelectedItem();
 		String workflow = wf.getURI();
 		setVisible(false);
+
+		String ontology =  getOntologyURIfromWorkflow(workflow);
+
+		instance.setSelectedOntology(ontology);
 		instance.setSelectedWorkflow(workflow);
+		instance.filterByWDO();
 		instance.startWorkflowDriver(workflow, null);
-		
+
 	}
-    
+
+	public static String getOntologyURIfromWorkflow(String workflow){
+		try {
+			BufferedReader reader = read(workflow);
+			String line;
+
+			while ((line = reader.readLine()) != null){ {
+				if(line.contains("srcwdo")){
+					reader.close();
+					
+					return line.substring(line.indexOf('\"') + 1, line.lastIndexOf('#') + 1);
+				} 
+			}
+			}
+		}	catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	public static BufferedReader read(String url) throws Exception{
+		return new BufferedReader(new InputStreamReader(new URL(url).openStream()));
+	}
+
 	public void cancelAction(java.awt.event.ActionEvent evt){
 		dispose();
 	}
-    
+
 	public void browseAction(java.awt.event.ActionEvent evt){
 		//Create a file chooser
 		fc = new JFileChooser(oFile);
@@ -225,27 +263,27 @@ public class OpenWorkflowTool extends javax.swing.JFrame {
 		LocalTF.setText(file);
 		oFile = fc.getSelectedFile();
 	}
-    
-    // Variables declaration - do not modify
+
+	// Variables declaration - do not modify
 	private DerivAUI instance;
 	private ServerCredentials creds;
 	private WorkflowDriver Driver;
-	
-    private javax.swing.ButtonGroup ButtonGroup;
-    private javax.swing.JTextField LocalTF;
-    private genericComboBox WFComboBox;
-    private javax.swing.JTextField URITF;
-    private javax.swing.JButton browseButton;
-    private javax.swing.JButton cancelButton;
-    private javax.swing.JRadioButton fromServerRadioButton;
-    private javax.swing.JRadioButton fromLocalRadioButton;
-    private javax.swing.JRadioButton fromURIRadioButton;
-    private javax.swing.JLabel openOntologyLabel;
-    private javax.swing.JButton submitButton;
-    
+
+	private javax.swing.ButtonGroup ButtonGroup;
+	private javax.swing.JTextField LocalTF;
+	private genericComboBox WFComboBox;
+	private javax.swing.JTextField URITF;
+	private javax.swing.JButton browseButton;
+	private javax.swing.JButton cancelButton;
+	private javax.swing.JRadioButton fromServerRadioButton;
+	private javax.swing.JRadioButton fromLocalRadioButton;
+	private javax.swing.JRadioButton fromURIRadioButton;
+	private javax.swing.JLabel openOntologyLabel;
+	private javax.swing.JButton submitButton;
+
 	private JFileChooser fc;
 	private File oFile;
-    // End of variables declaration
+	// End of variables declaration
 
 }
 
