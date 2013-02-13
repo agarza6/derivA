@@ -477,8 +477,6 @@ public class WorkflowDriver extends javax.swing.JFrame {
 
 	public void submitColdStartAction(java.awt.event.ActionEvent evt){
 
-		setCursor(new Cursor(Cursor.WAIT_CURSOR));
-
 		IndividualComboBox.Individual wf = (IndividualComboBox.Individual) availConclusionsComboBox.getSelectedItem();
 		conclusion = wf.getURI();
 
@@ -486,7 +484,7 @@ public class WorkflowDriver extends javax.swing.JFrame {
 			JOptionPane.showMessageDialog(this, "This was the Final Step of the Workflow. You will be automatically directed back to derivA", "Information", JOptionPane.INFORMATION_MESSAGE);
 			dispose();
 		}else{
-
+			setCursor(new Cursor(Cursor.WAIT_CURSOR));
 			System.out.println("Conclusion: " + conclusion);
 
 			initComponents();
