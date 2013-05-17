@@ -529,7 +529,7 @@ public class AddSourceTool extends JFrame {
 		//Upload data file to CI-Server
 		CIServerDump uploader = new CIServerDump(creds.getServerURL() + "pmlp/", creds.getUsername(), creds.getPassword());
 		byte[] resource_bytes = pmlP.getBytes();
-		String artifactURI = uploader.savePMLPToCIServer(shortName + ".owl", creds.getProject(), resource_bytes, true);
+		String artifactURI = uploader.savePMLPToCIServer(shortName + ".owl", creds.getProject(), resource_bytes, false);
 
 		RDFAggregater_Service Service = new RDFAggregater_Service();
 		RDFAggregater proxy = Service.getRDFAggregaterHttpPort();

@@ -20,23 +20,14 @@ public class SourcesList extends IndividualList {
 
 	private void queryPMLP(){
 		 individuals = new Vector<Individual>();
-
 		
 		edu.utep.trust.provenance.RDFStore_Service service = new edu.utep.trust.provenance.RDFStore_Service();
 		edu.utep.trust.provenance.RDFStore proxy = service.getRDFStoreHttpPort();
 
-		String query = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>" + 
-		"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>" +
-		"PREFIX owl: <http://www.w3.org/2002/07/owl#>" +
-		"PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>" +
-		"PREFIX pmlj: <http://inference-web.org/2.0/pml-justification.owl#>" +
-		"PREFIX pmlp: <http://inference-web.org/2.0/pml-provenance.owl#>" +
-		"PREFIX pml-sparql: <http://trust.utep.edu/sparql-pml#>" +
-		"PREFIX ds: <http://inference-web.org/2.0/ds.owl#>" +
-		"select ?URI ?NAME where {" +
-		"?URI a pmlp:Person ." +
-		"?URI pmlp:hasName ?NAME ." +
-		"}";
+		String query = "PREFIX pmlp: <http://inference-web.org/2.0/pml-provenance.owl#>" + 
+				"SELECT ?uri ?name " + 
+				"WHERE {?uri a pmlp:Agent ." +
+				"?uri pmlp:hasName ?name . } ";
 		
 		String pml_j = proxy.doQuery(query);
 	
@@ -53,7 +44,7 @@ public class SourcesList extends IndividualList {
 				
 				QuerySolution QS = results.nextSolution();
 				
-				personName = QS.get("?NAME").toString();
+				personName = QS.get("?name").toString();
 				
 				personName = personName.substring(0, personName.indexOf('^'));
 				
@@ -61,7 +52,7 @@ public class SourcesList extends IndividualList {
 //					personName = personName.substring(personName.lastIndexOf('/') + 1);
 //				}
 				
-				personURI = QS.get("?URI").toString();
+				personURI = QS.get("?uri").toString();
 				
 				if(personName != null && personName.length() > 1){
 					individuals.add(new Individual(personURI, personName, personURI));

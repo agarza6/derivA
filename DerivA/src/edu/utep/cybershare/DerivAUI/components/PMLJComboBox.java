@@ -35,12 +35,11 @@ public class PMLJComboBox extends IndividualComboBox {
 //	}
 
 
-	public void queryPMLJ(String workflow){
+	public void queryPMLJ(String ontology){
 		individuals = new Vector<Individual>();
-		workflow = "ALL_PROJECTS_$!!$!";
 
 		String pml_j, query = "";
-		if(workflow.equalsIgnoreCase("ALL_PROJECTS_$!!$!")){
+		if(ontology.equalsIgnoreCase("ALL_PROJECTS_$!!$!")){
 			query = "SELECT DISTINCT ?nodeset ?conclusionURL " +
 					"WHERE {" +
 					"?nodeset a <http://inference-web.org/2.0/pml-justification.owl#NodeSet> . " +
@@ -48,11 +47,14 @@ public class PMLJComboBox extends IndividualComboBox {
 					"?conclusion <http://inference-web.org/2.0/pml-provenance.owl#hasURL> ?conclusionURL .}";
 
 		}else{
-			query = "SELECT DISTINCT ?nodeset ?conclusionURL WHERE {?nodeset a <http://inference-web.org/2.0/pml-justification.owl#NodeSet> . " +
+			query = "SELECT DISTINCT ?nodeset " +
+					"WHERE { " +
+					"?concType <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://inference-web.org/2.0/pml-provenance.owl#Information> . " +
+					"?conclusion a ?concType . " +
 					"?nodeset <http://inference-web.org/2.0/pml-justification.owl#hasConclusion> ?conclusion . " +
-					"?conclusion <http://inference-web.org/2.0/pml-provenance.owl#hasURL> ?conclusionURL . " +
-					"FILTER regex(str(?inferenceRule), \"" + workflow + "\") " +
-							"}";
+					"?nodeset a <http://inference-web.org/2.0/pml-justification.owl#NodeSet> . " +
+					"FILTER regex(str(?concType),\"" + ontology + ".*\", \"i\") " +
+					"}";
 		}
 
 		edu.utep.trust.provenance.RDFStore_Service service = new edu.utep.trust.provenance.RDFStore_Service();

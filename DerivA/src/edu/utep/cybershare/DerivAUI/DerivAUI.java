@@ -17,6 +17,8 @@ DAMAGE.
 
 package edu.utep.cybershare.DerivAUI;
 
+import java.awt.Button;
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -124,7 +126,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 
 	//Buttons
 	private javax.swing.JButton conclusionBrowserButton;
-	private javax.swing.JButton captureProvenanceButton;
+	private Button captureProvenanceButton;
 	private javax.swing.JButton addAntecedentButton;
 	private javax.swing.JButton removeAntecedentButton;
 	private javax.swing.JButton assertArtifactModeButton;
@@ -132,6 +134,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 	private javax.swing.JButton docArtifactModeButton;
 	private javax.swing.JButton removeSourceButton;
 	private javax.swing.JButton addSourceButton;
+	private javax.swing.JButton viewWorkflowButton;
 
 	//Menu Items
 	private javax.swing.JMenu fileMenu;
@@ -202,6 +205,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		selectedWorkflowSTR = sel;
 		String temp = selectedWorkflowSTR.substring(selectedWorkflowSTR.lastIndexOf('/') + 1);
 		selectedWorkflowLabel.setText(temp);
+		viewWorkflowButton.setVisible(true);
 	}
 
 	private void initTripleStoreComponents(){
@@ -253,13 +257,14 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		jScrollPane4 = new javax.swing.JScrollPane();
 		jScrollPane5 = new javax.swing.JScrollPane();
 		addSourceButton = new javax.swing.JButton();
+		viewWorkflowButton = new javax.swing.JButton();
 		removeSourceButton = new javax.swing.JButton();
 		IncludeUserCheckBox = new javax.swing.JCheckBox();
 		ConclusionPanel = new javax.swing.JPanel();
 		conclusionLabel = new javax.swing.JLabel();
 		fileFormatLabel = new javax.swing.JLabel();
 		fileTypeLabel = new javax.swing.JLabel();
-		captureProvenanceButton = new javax.swing.JButton();
+		captureProvenanceButton = new java.awt.Button();
 		conclusionFromTab = new javax.swing.JTabbedPane();
 		conclusionFromLocalTab = new javax.swing.JPanel();
 		localFileSystemLabel = new javax.swing.JLabel();
@@ -300,6 +305,9 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		addAgentTool = new javax.swing.JMenuItem();
 		addFormatTool = new javax.swing.JMenuItem();
 		IASortByLabel = new javax.swing.JLabel();
+		
+		ProgressBar.setForeground(Color.green);
+		ProgressBar.setBackground(Color.black);
 
 		check = new ImageIcon(getClass().getResource("images/tick.png"));
 		uncheck = new ImageIcon(getClass().getResource("images/checkbox_unchecked.png"));
@@ -311,7 +319,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		AntecedentIcon = uncheck;
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-		this.setTitle("derivA - Manual Capture of Provenance");
+		this.setTitle("derivA - Manual Annotation of Provenance. PML Edition");
 
 		ServerLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
 		ServerLabel.setText("Server:");
@@ -334,7 +342,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		selectedWorkflowLabel.setText("none");
 
 		ModeLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
-		ModeLabel.setText("Select Capture Mode");
+		ModeLabel.setText("Select Provenance Step Type");
 
 		assertArtifactModeButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("images/assert.png"))); // NOI18N
 		assertArtifactModeButton.addActionListener(new java.awt.event.ActionListener() {
@@ -405,54 +413,72 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 										.addContainerGap())
 				);
 
-		javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
-		mainPanel.setLayout(mainPanelLayout);
-		mainPanelLayout.setHorizontalGroup(
-				mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(mainPanelLayout.createSequentialGroup()
-						.addContainerGap()
-						.addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-								.addGroup(mainPanelLayout.createSequentialGroup()
-										.addGap(10, 10, 10)
-										.addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-										.addGroup(mainPanelLayout.createSequentialGroup()
-												.addComponent(ServerLabel)
-												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-												.addComponent(selectedServerLabel)
-												.addGap(18, 18, 18)
-												.addComponent(ProjectLabel)
-												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-												.addComponent(selectedProjectLabel))
-												.addGroup(mainPanelLayout.createSequentialGroup()
-														.addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-																.addComponent(OntologyLabel)
-																.addComponent(WorkflowLabel))
-																.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-																.addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-																		.addComponent(selectedOntologyLabel)
-																		.addComponent(selectedWorkflowLabel))))
-																		.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-				);
-		mainPanelLayout.setVerticalGroup(
-				mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(mainPanelLayout.createSequentialGroup()
-						.addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-								.addComponent(ServerLabel)
-								.addComponent(selectedServerLabel)
-								.addComponent(ProjectLabel)
-								.addComponent(selectedProjectLabel))
-								.addGap(5, 5, 5)
-								.addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-										.addComponent(OntologyLabel)
-										.addComponent(selectedOntologyLabel))
-										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-										.addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-												.addComponent(WorkflowLabel)
-												.addComponent(selectedWorkflowLabel))
-												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-												.addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-				);
+		viewWorkflowButton.setForeground(new java.awt.Color(102, 102, 255));
+        viewWorkflowButton.setText("View");
+        viewWorkflowButton.setBorder(null);
+        viewWorkflowButton.setBorderPainted(false);
+        viewWorkflowButton.setContentAreaFilled(false);
+        viewWorkflowButton.setVisible(false);
+        viewWorkflowButton.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				openWorkflowViewAction(evt);
+			}
+		});
+
+        javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
+        mainPanel.setLayout(mainPanelLayout);
+        mainPanelLayout.setHorizontalGroup(
+            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(mainPanelLayout.createSequentialGroup()
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(mainPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addComponent(ServerLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(selectedServerLabel)
+                                .addGap(18, 18, 18)
+                                .addComponent(ProjectLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(selectedProjectLabel))
+                            .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(OntologyLabel)
+                                    .addComponent(WorkflowLabel))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(selectedOntologyLabel)
+                                    .addGroup(mainPanelLayout.createSequentialGroup()
+                                        .addComponent(selectedWorkflowLabel)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(viewWorkflowButton))))))
+                    .addGroup(mainPanelLayout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        mainPanelLayout.setVerticalGroup(
+            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(mainPanelLayout.createSequentialGroup()
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ServerLabel)
+                    .addComponent(selectedServerLabel)
+                    .addComponent(ProjectLabel)
+                    .addComponent(selectedProjectLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(OntologyLabel)
+                    .addComponent(selectedOntologyLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(WorkflowLabel)
+                    .addComponent(selectedWorkflowLabel)
+                    .addComponent(viewWorkflowButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
 		SourcesLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
 		SourcesLabel.setText("Select All Sources");
@@ -550,7 +576,8 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		fileTypeLabel.setText("File Format:");
 
 		captureProvenanceButton.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-		captureProvenanceButton.setText("CAPTURE PROVENANCE");
+		captureProvenanceButton.setBackground(Color.green);
+		captureProvenanceButton.setLabel("CAPTURE PROVENANCE");
 		captureProvenanceButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				captureProvenanceAction(evt);
@@ -706,14 +733,14 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		Tabs.addTab("Conclusion", ConclusionIcon, ConclusionPanel);
 
 		InferenceAgentLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
-		InferenceAgentLabel.setText("Select an Actor");
+		InferenceAgentLabel.setText("Select an Agent");
 		agentComboBox.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				changeIACheckStatus(evt);
 			}
 		});
 
-		String[] IATypes = {"Agent", "Engine", "Person", "Organization" };
+		String[] IATypes = {"Agent", "Software", "Person", "Organization" };
 		IATypeComboBox = new javax.swing.JComboBox<String>(IATypes);
 		IATypeComboBox.setSelectedIndex(0);
 		IATypeComboBox.addActionListener(new java.awt.event.ActionListener() {
@@ -751,10 +778,10 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 								.addContainerGap(172, Short.MAX_VALUE))
 				);
 
-		Tabs.addTab("Actor", IAIcon, IAgentPanel);
+		Tabs.addTab("Agent", IAIcon, IAgentPanel);
 		InferenceRuleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
 
-		InferenceRuleLabel.setText("Select Plan/Method");
+		InferenceRuleLabel.setText("Select Activity Method");
 		inferenceRuleComboBox.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				changeIRCheckStatus(evt);
@@ -782,14 +809,14 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 						.addContainerGap(206, Short.MAX_VALUE))
 				);
 
-		Tabs.addTab("Plan/Method", IRIcon, IRulePanel);
+		Tabs.addTab("Activity Method", IRIcon, IRulePanel);
 
 
 		AntecedentLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
 		AntecedentLabel.setText("Select All Antecedents that Derive the Selected Conclusion");
 		jScrollPane2.setViewportView(antecedentList);
 
-		antecedentsByProjectCheckBox.setSelected(true);
+		antecedentsByProjectCheckBox.setSelected(false);
 		antecedentsByProjectCheckBox.setText("Artifacts by Project ONLY");
 		antecedentsByProjectCheckBox.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1019,7 +1046,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		conclusionList.setEnabled(false);
 		conclusionBrowserButton.setEnabled(true);
 
-		captureProvenanceButton.setText("ASSERT ARTIFACT!");
+		captureProvenanceButton.setLabel("ASSERT ARTIFACT!");
 
 		if(Tabs.getSelectedIndex() > 1)
 			Tabs.setSelectedIndex(0);
@@ -1037,7 +1064,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		conclusionList.setEnabled(false);
 		conclusionBrowserButton.setEnabled(true);
 
-		captureProvenanceButton.setText("DERIVE ARTIFACT!");
+		captureProvenanceButton.setLabel("DERIVE ARTIFACT!");
 
 		if(Tabs.getSelectedIndex() == 0)
 			Tabs.setSelectedIndex(1);
@@ -1133,7 +1160,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 	}
 	public void changeIRCheckStatus(java.awt.event.ActionEvent evt){
 		IndividualComboBox.Individual ruleInd = (IndividualComboBox.Individual) inferenceRuleComboBox.getSelectedItem();
-		if(!ruleInd.getName().equalsIgnoreCase(" -- Choose Inference Rule -- "))
+		if(!ruleInd.getName().equalsIgnoreCase(" -- Choose Activity Method -- "))
 			Tabs.setIconAt(3, check);
 		else
 			Tabs.setIconAt(3,uncheck);
@@ -1211,10 +1238,10 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 			JOptionPane.showMessageDialog(this, errMsg, "Error", JOptionPane.ERROR_MESSAGE);
 
 		} finally {
-			JOptionPane.showMessageDialog(null, "Assertion Complete.");
+//			JOptionPane.showMessageDialog(null, "Assertion Complete.");
 			setCursor(normal);
 			if(selectedWorkflowSTR != null){
-				Driver = new WorkflowDriver(instance, creds, selectedWorkflowSTR, newConclusion);
+				Driver = new WorkflowDriver(instance, creds, selectedWorkflowSTR, selectedOntologySTR, newConclusion);
 				Driver.setVisible(true);
 			}
 		}
@@ -1269,8 +1296,12 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		new OpenWorkflowTool(instance, creds, Driver).setVisible(true);
 	}
 
-	public void startWorkflowDriver(String workflow, String conclusion){
-		Driver = new WorkflowDriver(instance, creds, workflow, conclusion);
+	public void openWorkflowViewAction(java.awt.event.ActionEvent evt){
+		new WorkflowViewer(selectedWorkflowSTR).setVisible(true);
+	}
+	
+	public void startWorkflowDriver(String workflow, String ontology, String conclusion){
+		Driver = new WorkflowDriver(instance, creds, workflow, ontology, conclusion);
 	}
 
 	public void addSourceAction(java.awt.event.ActionEvent evt){
@@ -1382,10 +1413,10 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 			JOptionPane.showMessageDialog(this, errMsg, "Error", JOptionPane.ERROR_MESSAGE);
 
 		} finally {
-			JOptionPane.showMessageDialog(null, "Derivation Complete.");
+//			JOptionPane.showMessageDialog(null, "Derivation Complete.");
 			setCursor(normal);
 			if(selectedWorkflowSTR != null){
-				Driver = new WorkflowDriver(instance, creds, selectedWorkflowSTR, newConclusion);
+				Driver = new WorkflowDriver(instance, creds, selectedWorkflowSTR, selectedOntologySTR, newConclusion);
 				Driver.setVisible(true);
 			}
 		}
@@ -1564,18 +1595,18 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 			conclusionTypeComboBox.queryInformationTypes();
 			setProgress(35);
 
-			ProgressBar.setString("Loading Inference Agents");
+			ProgressBar.setString("Loading Agents");
 			agentComboBox.queryAgents(0);
 			setProgress(50);
 
-			ProgressBar.setString("Loading Inference Rules");
+			ProgressBar.setString("Loading Activity Methods");
 			inferenceRuleComboBox.queryInferenceRules();
 			setProgress(65);
 
 			ProgressBar.setString("Loading Antecedents");
 			setProgress(79);
 
-			Project_PMLJ_Nodes = new PMLJList(creds.getProject()).getPMLList();
+			Project_PMLJ_Nodes = new PMLJList("ALL_PROJECTS_$!!$!").getPMLList();
 			antecedentList.setModel(Project_PMLJ_Nodes);
 			ProgressBar.setString("Loading Conclusions");
 			setProgress(89);

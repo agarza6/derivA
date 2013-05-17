@@ -34,5 +34,9 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/lib/jgraph/jgraph.jar"/>
+	<classpathentry kind="lib" path="/lib/jgraph/jgraphx-1_5_1_11.jar"/>
+	<classpathentry kind="lib" path="/lib/util/owls-api-3.0.jar"/>
+	<classpathentry kind="lib" path="/lib/apache/commons-net-3.2.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

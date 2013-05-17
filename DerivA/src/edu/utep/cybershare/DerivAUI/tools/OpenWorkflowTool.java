@@ -215,7 +215,7 @@ public class OpenWorkflowTool extends javax.swing.JFrame {
 		instance.setSelectedOntology(ontology);
 		instance.setSelectedWorkflow(workflow);
 		instance.filterByWDO();
-		instance.startWorkflowDriver(workflow, null);
+		instance.startWorkflowDriver(workflow, ontology, null);
 
 	}
 
@@ -228,7 +228,7 @@ public class OpenWorkflowTool extends javax.swing.JFrame {
 				if(line.contains("srcwdo")){
 					reader.close();
 					
-					return line.substring(line.indexOf('\"') + 1, line.lastIndexOf('#') + 1);
+					return line.substring(line.indexOf('\"') + 1, line.lastIndexOf('#'));
 				} 
 			}
 			}

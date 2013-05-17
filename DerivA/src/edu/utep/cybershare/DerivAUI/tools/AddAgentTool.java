@@ -101,7 +101,7 @@ public class AddAgentTool extends javax.swing.JFrame {
 		addNameLabel.setText("Actor Name:");
         descriptionLabel.setText("Description:");
 
-		cancelButton.setText("Cancel");
+		cancelButton.setText("Close");
 		cancelButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				cancelAction(evt);
@@ -228,7 +228,7 @@ public class AddAgentTool extends javax.swing.JFrame {
 		//Upload data file to CI-Server
 		CIServerDump uploader = new CIServerDump(creds.getServerURL() + "pmlp/", creds.getUsername(), creds.getPassword());
 		byte[] resource_bytes = AgentString.getBytes();
-		String artifactURI = uploader.savePMLPToCIServer(fullName + ".owl", creds.getProject(), resource_bytes, true);
+		String artifactURI = uploader.savePMLPToCIServer(fullName + ".owl", creds.getProject(), resource_bytes, false);
 		
 		
 		RDFAggregater_Service Service = new RDFAggregater_Service();

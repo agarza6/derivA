@@ -35,23 +35,28 @@ public class AgentComboBox extends IndividualComboBox {
 		edu.utep.trust.provenance.RDFStore_Service service = new edu.utep.trust.provenance.RDFStore_Service();
 		edu.utep.trust.provenance.RDFStore proxy = service.getRDFStoreHttpPort();
 		
-		String query = "";
+		String query = "", subject = "?name";
 		switch (selection){
-		case 0: query = "PREFIX pmlp: <http://inference-web.org/2.0/pml-provenance.owl#>" + 
-				"SELECT ?uri " + 
-				"WHERE {?uri a pmlp:Agent }";
+		case 0: query = "PREFIX pmlp: <http://inference-web.org/2.0/pml-provenance.owl#> " + 
+				"SELECT ?uri ?name " + 
+				"WHERE {?uri a pmlp:Agent ." +
+				"?uri pmlp:hasName ?name . }";
 		break;
-		case 1: query = "PREFIX pmlp: <http://inference-web.org/2.0/pml-provenance.owl#>" +
-				"SELECT ?uri " +
+		case 1: query = "PREFIX pmlp: <http://inference-web.org/2.0/pml-provenance.owl#> " +
+				"SELECT ?uri ?name" +
 				"WHERE { ?uri a pmlp:InferenceEngine . }";
+				subject = "?uri";
 		break;
-		case 2: query = "PREFIX pmlp: <http://inference-web.org/2.0/pml-provenance.owl#>" +
-				"SELECT ?uri " +
-				"WHERE { ?uri a pmlp:Person . }";
+		case 2: query = "PREFIX pmlp: <http://inference-web.org/2.0/pml-provenance.owl#> " +
+				"SELECT ?uri ?name " +
+				"WHERE { ?uri a pmlp:Person . " +
+				"?uri pmlp:hasName ?name . }";
 		break;
-		case 3: query = "PREFIX pmlp: <http://inference-web.org/2.0/pml-provenance.owl#>" +
-				"SELECT ?uri " +
-				"WHERE { ?uri a pmlp:Organization . }";
+		case 3: query = "PREFIX pmlp: <http://inference-web.org/2.0/pml-provenance.owl#> " +
+				"SELECT ?uri ?name " +
+				"WHERE { ?uri a pmlp:Organization . " +
+				"?uri pmlp:hasName ?name . }";
+				subject = "?uri";
 		break;
 		}
 		
@@ -71,9 +76,16 @@ public class AgentComboBox extends IndividualComboBox {
 			while(results.hasNext())
 			{
 				
-				format = results.nextSolution().get("?uri").toString();
+				format = results.nextSolution().get(subject).toString();
 
-				String prettyName = stripURI(format);		
+				String prettyName = "";
+				if(subject.equals("?uri")){
+					prettyName= stripURI(format);
+				}else{
+					prettyName = format.substring(0, format.indexOf('^'));
+				}
+				
+				 
 				if(format == null || prettyName == null)
 				{
 					System.out.println("Null Pretty Name Conversion");

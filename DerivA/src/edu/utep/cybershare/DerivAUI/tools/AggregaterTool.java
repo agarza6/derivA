@@ -34,7 +34,7 @@ public class AggregaterTool extends javax.swing.JFrame {
 
         URITF.setText("http://");
 
-        cancelButton.setText("Cancel");
+        cancelButton.setText("Close");
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				cancelAction(evt);

@@ -44,7 +44,7 @@ import edu.utep.cybershare.DerivAUI.components.typeComboBox;
 public class WorkflowDriver extends javax.swing.JFrame {
 
 	private DerivAUI instance;
-	private String workflow, conclusion;
+	private String workflow, conclusion, ontology;
 	private DerivationMaker DM;
 	private ServerCredentials creds;
 
@@ -91,11 +91,12 @@ public class WorkflowDriver extends javax.swing.JFrame {
 	private Vector<Individual> inferenceRule, inferenceEngine, conclusionType, nextConclusionType;
 	private Vector<IndividualList.Individual> CurrentlySelectedAntecedentsVector, AvailAntecedentsVector; 
 
-	public WorkflowDriver(DerivAUI ui, ServerCredentials sc, String wf, String conc){
+	public WorkflowDriver(DerivAUI ui, ServerCredentials sc, String wf, String onto, String conc){
 		creds = sc;
 		conclusion = conc;
 		instance = ui;
 		workflow = wf;
+		ontology = onto;
 
 		if(conclusion != null){
 			if(isFinalConclusion(conclusion)){
@@ -187,7 +188,10 @@ public class WorkflowDriver extends javax.swing.JFrame {
 		inferenceAgentLabel.setText("Actor: ");
 
 		int IACount = inferenceAgentComboBox.getItemCount();
-		inferenceAgentsFound.setText("Found " + IACount);
+		if (IACount == 0)
+			inferenceAgentComboBox.queryAgents(0);
+		else
+			inferenceAgentsFound.setText("Found " + IACount);
 
 		text4.setFont(new java.awt.Font("Tahoma", 1, 11));
 		text4.setText("Executing");
@@ -217,7 +221,7 @@ public class WorkflowDriver extends javax.swing.JFrame {
 		int TypeCount = conclusionTypeComboBox.getItemCount();
 		conclusionTypesFound.setText("Found " + TypeCount);
 
-		procedeButton.setText("Procede");
+		procedeButton.setText("Proceed");
 		procedeButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				submitAction(evt);
@@ -380,7 +384,7 @@ public class WorkflowDriver extends javax.swing.JFrame {
 			String temp = iter.next();
 
 			if(ants.queryAntecedentsByWorkflow(temp) == 0){
-				Object[] options = {"Make Assertion","Procede"};
+				Object[] options = {"Go Make Assertion","Proceed With Workflow"};
 				temp = temp.substring(temp.lastIndexOf('/'));
 				int n = JOptionPane.showOptionDialog(this,
 						"An antecedent of type: " + temp + " is missing, Do you wish to create it first?",
@@ -395,6 +399,7 @@ public class WorkflowDriver extends javax.swing.JFrame {
 					dispose();
 				}else{
 					System.out.println("Do Something Else");
+					break;
 				}
 			}
 		}
@@ -415,7 +420,7 @@ public class WorkflowDriver extends javax.swing.JFrame {
 		stopColdStart = new javax.swing.JButton();
 		coldStartLabel = new javax.swing.JLabel();
 		availConclusionsComboBox = new PMLJComboBox();
-		availConclusionsComboBox.queryPMLJ(workflow);
+		availConclusionsComboBox.queryPMLJ(ontology);
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setTitle("Select Conclusion Start Point");
@@ -594,7 +599,7 @@ public class WorkflowDriver extends javax.swing.JFrame {
 
 		System.out.println(qResult);
 
-		String conclusionTypeURI = null, conclusionTypeLabel;
+		String conclusionTypeURI = null;
 
 		if(rSet != null)
 			while(rSet.hasNext()){
@@ -615,7 +620,8 @@ public class WorkflowDriver extends javax.swing.JFrame {
 				"WHERE {  " +
 				"?type <http://www.w3.org/2000/01/rdf-schema#subClassOf> <" + conclusionType + "> . " +
 				"?type <http://trust.utep.edu/2.0/wdo.owl#isInputTo> ?method .  " +
-				"OPTIONAL { ?method2 <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://inference-web.org/2.0/pml-provenance.owl#Source> . FILTER(?method2 = ?method) } " +
+				"OPTIONAL { ?method2 <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://inference-web.org/2.0/pml-provenance.owl#Source> . " +
+				"FILTER(?method2 = ?method) } " +
 				"FILTER(!bound(?method2)) " +
 				"}";
 

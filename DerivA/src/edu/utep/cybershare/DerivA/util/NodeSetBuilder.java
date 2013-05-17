@@ -6,7 +6,6 @@ import java.util.Vector;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.inference_web.pml.v2.pmlp.IWAgent;
 import org.inference_web.pml.v2.pmlp.IWInferenceEngine;
 import org.inference_web.pml.v2.pmlp.IWInformation;
 import org.inference_web.pml.v2.util.PMLObjectManager;
@@ -20,17 +19,15 @@ import pml.dumping.writer.NodesetWriter;
 public class NodeSetBuilder {
 
 	//General Variables
-	public String[] sources;
-	public String pmljURI;
-	public String dateTime;
-	public String artifactURI;
-	public String formatURI;
-	public String fileName;
+	public String[] sources;	//Provenance Sources URIs
+	public String pmljURI;		//URI of the final PML File
+	public String dateTime;		
+	public String artifactURI;	//accesible URI of the data artifact
+	public String formatURI;	//Conclusion Format
+	public String fileName, dataFilePath;		//Data Artifact File Name
 	
 
 	//Assertion Variables
-	public String dataFilePath;
-	public String dataFileName;
 	public String docTypeURI;
 
 	//Inference Engine Variables
@@ -76,7 +73,7 @@ public class NodeSetBuilder {
 		//Set Rule
 		wtr.setRule("http://inference-web.org/registry/DPR/Told.owl#Told");
 
-		wtr.setFileName(dataFileName);
+		wtr.setFileName(fileName);
 		
 		//Set Source
 		String[] aSource = sources;
@@ -183,10 +180,6 @@ public class NodeSetBuilder {
 
 		String AgentString = PMLObjectManager.printPMLObjectToString(agent);
 		return AgentString;
-
-		
-		
-//		PMLObjectManager.savePMLObject(agent, "c:/agent.owl");
 
 	}
 	

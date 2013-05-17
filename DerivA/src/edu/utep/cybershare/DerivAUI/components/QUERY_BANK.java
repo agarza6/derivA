@@ -59,4 +59,11 @@ public class QUERY_BANK {
 			"FILTER(!bound(?method2)) " +
 			"}";
 	
+	public String GET_TYPES_BY_ONTOLOGY = "SELECT DISTINCT ?informationSubclass ?subclassLabel " +
+			"WHERE {  " +
+			"?informationSubclass <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://inference-web.org/2.0/pml-provenance.owl#Information> .  " +
+			"?informationSubclass <http://www.w3.org/2000/01/rdf-schema#label> ?subclassLabel " +
+			"FILTER regex(str(?informationSubclass),\"" + ontology + ".*\", \"i\") " +
+				"}";
+	
 }

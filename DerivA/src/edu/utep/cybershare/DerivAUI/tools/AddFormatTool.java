@@ -53,7 +53,7 @@ public class AddFormatTool extends javax.swing.JFrame {
 
 		formatDescLabel.setText("URL of Description");
 
-		CancelButton.setText("Cancel");
+		CancelButton.setText("Close");
 		CancelButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				CancelButtonActionPerformed(evt);
@@ -140,7 +140,7 @@ public class AddFormatTool extends javax.swing.JFrame {
 			//Upload data file to CI-Server
 			CIServerDump uploader = new CIServerDump(creds.getServerURL() + "pmlp/", creds.getUsername(), creds.getPassword());
 			byte[] resource_bytes = pmlP.getBytes();
-			String artifactURI = uploader.savePMLPToCIServer(name + ".owl", creds.getProject(), resource_bytes, true);
+			String artifactURI = uploader.savePMLPToCIServer(name + ".owl", creds.getProject(), resource_bytes, false);
 
 			System.out.println(pmlP);
 			

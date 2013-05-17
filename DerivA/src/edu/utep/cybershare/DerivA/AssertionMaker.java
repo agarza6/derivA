@@ -18,7 +18,6 @@ DAMAGE.
 package edu.utep.cybershare.DerivA;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -28,10 +27,10 @@ import java.net.URLEncoder;
 
 import javax.swing.JOptionPane;
 
-import edu.utep.trust.provenance.*;
-import edu.utep.cybershare.ciclient.CIUtils;
 import edu.utep.cybershare.DerivA.util.*;
 import edu.utep.cybershare.DerivAUI.components.IndividualList.Individual;
+import edu.utep.trust.provenance.RDFAggregater;
+import edu.utep.trust.provenance.RDFAggregater_Service;
 
 public class AssertionMaker {
 
@@ -39,11 +38,10 @@ public class AssertionMaker {
 	private File file;
 
 	private boolean conclusionFromURL;
-	private String artifactURI;
+	private String conclusionURI;
 	private String pmljURI;
 	private String docTypeURI;
 	private String formatURI;
-	private String docTypeLabel;
 	private String[] sources;
 
 	private boolean useSessionUser = false;
@@ -56,11 +54,10 @@ public class AssertionMaker {
 
 	public void setDataFilePath(String path){dataFilePath = path;}
 	public void setDataFilePath(String path, boolean from){dataFilePath = path; conclusionFromURL = from;}
-	public void setArtifactURI(String uri){artifactURI = uri;}
+	public void setArtifactURI(String uri){conclusionURI = uri;}
 	public void setPMLJ_URI(String uri){pmljURI = uri;}
 	public void setDocumentTypeURI(String uri){docTypeURI = uri;}
 	public void setDocumentFormatURI(String uri){formatURI = uri;}
-	public void setDocumentTypeLabel(String label){docTypeLabel = label;}
 	public void setFile(File f){file = f;}
 	public void setUseSessionUser(boolean b){useSessionUser = b;}
 	public void setSources(Vector<edu.utep.cybershare.DerivAUI.components.IndividualList.Individual> temp){
@@ -95,32 +92,48 @@ public class AssertionMaker {
 
 		String dataFileName = "";
 		
-		CIServerDump uploader = new CIServerDump(creds.getServerURL() + "udata/", creds.getUsername(), creds.getPassword());
+		CIServerDump uploader = new CIServerDump(creds.getServerURL() + creds.getProject() +"/", creds.getUsername(), creds.getPassword());
 		
+		System.out.println("uploader Server: " + creds.getServerURL() + creds.getProject() +"/");
 		System.out.println("conclusion from URL: " + conclusionFromURL);
 	
 
 		if(!conclusionFromURL){
 			//Upload data file to CI-Server
-			byte[] resource_bytes = null;
-
-			try {
-				resource_bytes = CIUtils.ciGetBytesFromFile(file);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			
+			FTPServerUploader FTP = new FTPServerUploader();	
+			conclusionURI = FTP.uploadFile(dataFilePath);
+			
+//			byte[] resource_bytes = null;
+			
+//			try {
+//				resource_bytes = CIUtils.ciGetBytesFromFile(file);
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
 
 			dataFileName = dataFilePath.substring(dataFilePath.lastIndexOf('\\') + 1);
-			artifactURI = uploader.saveDataToCIServer(dataFileName, creds.getProject(), resource_bytes, true);
+			
+//			if (resource_bytes == null || resource_bytes.length <= 0){
+//				resource_bytes = new byte[1];
+//				resource_bytes[0] = 1;
+//			}
+			
+//			artifactURI = uploader.saveDataToCIServer(dataFileName, creds.getProject(), resource_bytes, true);
+//			artifactURI = "http://thewrestlingrevolution.com/uploads/" + dataFileName;
+			System.out.println("ARTIFACT: " + conclusionURI);
 
 		}else{
-			artifactURI = dataFilePath;
+			
+			conclusionURI = dataFilePath;
 			dataFileName = dataFilePath.replace("http","");
 			dataFileName = dataFileName.replace("://", "");
 			if(dataFileName.lastIndexOf('/') == (dataFileName.length() - 1)){
 				dataFileName = dataFileName.substring(0, dataFileName.length() - 1);
 			}
+			
 			dataFileName = dataFileName.replace("/", "_slash_");
+			
 		}
 		
 
@@ -133,16 +146,15 @@ public class AssertionMaker {
 		try {
 			dataFileName = URLEncoder.encode(dataFileName, "UTF-8");
 			NSB.dataFilePath = dataFilePath;
-			NSB.artifactURI = artifactURI;
+			NSB.artifactURI = conclusionURI;
 			NSB.docTypeURI = docTypeURI;
 			NSB.formatURI = formatURI;
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-
 		
 		//Build Nodeset
-		NSB.dataFileName = dataFileName;
+		NSB.fileName = dataFileName;
 		pmljURI = NSB.assertArtifact();
 
 		RDFAggregater_Service Service = new RDFAggregater_Service();
@@ -155,10 +167,11 @@ public class AssertionMaker {
 		}
 
 		if(result.equalsIgnoreCase("SUCCESS")){
-			JOptionPane.showMessageDialog(null, "Upload Successful");
+			JOptionPane.showMessageDialog(null, "Assertion: Upload Successful \n " + pmljURI);
 		}else{
 			JOptionPane.showMessageDialog(null, "Aggregation Failed");
 		}
+		
 		return pmljURI;
 	}
 }

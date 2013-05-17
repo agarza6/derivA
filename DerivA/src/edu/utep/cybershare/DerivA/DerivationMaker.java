@@ -1,19 +1,14 @@
 package edu.utep.cybershare.DerivA;
 
-
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
-import pml.dumping.writer.NodesetWriter;
 import edu.utep.cybershare.DerivA.util.*;
 import edu.utep.cybershare.DerivAUI.components.IndividualList.Individual;
-import edu.utep.cybershare.ciclient.CIUtils;
 
 public class DerivationMaker {
 	
@@ -55,19 +50,25 @@ public class DerivationMaker {
 		
 		//Upload data file to CI-Server
 		CIServerDump uploader = new CIServerDump(creds.getServerURL() + "udata/", creds.getUsername(), creds.getPassword());
-		byte[] resource_bytes = null;
-
-		//			contents = GetURLContents.downloadText("file:\\"+dataFilePath);
-		try {
-			resource_bytes = CIUtils.ciGetBytesFromFile(file);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+		FTPServerUploader FTP = new FTPServerUploader();	
+		conclusionURI = FTP.uploadFile(dataFilePath);
+		
+		
+		
+//		byte[] resource_bytes = null;
+//
+//		//			contents = GetURLContents.downloadText("file:\\"+dataFilePath);
+//		try {
+//			resource_bytes = CIUtils.ciGetBytesFromFile(file);
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
 		String dataFileName = dataFilePath.substring(dataFilePath.lastIndexOf('\\') + 1);
 		
-		conclusionURI = uploader.saveDataToCIServer(dataFileName, creds.getProject(), resource_bytes, true);
+//		conclusionURI = uploader.saveDataToCIServer(dataFileName, creds.getProject(), resource_bytes, true);
 		
 		NSB.artifactURI = conclusionURI;
 		NSB.formatURI = conclusionFormatURI;
@@ -91,7 +92,7 @@ public class DerivationMaker {
 		}
 
 		if(result.equalsIgnoreCase("SUCCESS")){
-			JOptionPane.showMessageDialog(null, "Upload Successful");
+			JOptionPane.showMessageDialog(null, "Derivation: Upload Successful");
 		}else{
 			JOptionPane.showMessageDialog(null, "Aggregation Failed");
 		}

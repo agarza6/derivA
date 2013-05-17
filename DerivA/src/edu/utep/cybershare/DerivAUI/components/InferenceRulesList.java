@@ -6,7 +6,6 @@ import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.ResultSetFactory;
 
-import edu.utep.cybershare.DerivAUI.components.IndividualComboBox.Individual;
 
 public class InferenceRulesList extends IndividualList {
 

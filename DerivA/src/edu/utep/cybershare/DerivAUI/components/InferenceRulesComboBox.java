@@ -3,18 +3,13 @@ package edu.utep.cybershare.DerivAUI.components;
 import java.util.ArrayList;
 import java.util.Vector;
 
-import java.util.HashMap;
-
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.ResultSetFactory;
 
-import edu.utep.cybershare.DerivAUI.components.IndividualList.Individual;
-
 public class InferenceRulesComboBox extends IndividualComboBox {
 	
 	private static final long serialVersionUID = 1L;
-	private HashMap<String,Integer> prettyNames = new HashMap<String,Integer>();
 	
 	private String Ontology = null;
 	
@@ -157,7 +152,7 @@ public class InferenceRulesComboBox extends IndividualComboBox {
 
 		String rules = "", query = "";
 		if(Ontology == null){
-			query = "SELECT DISTINCT ?inferenceRule ?ruleLabel ?ruleClass " +
+			query = "SELECT DISTINCT ?inferenceRule ?ruleLabel " +
 					"WHERE {?inferenceRule <http://www.w3.org/2000/01/rdf-schema#subClassOf> " +
 					"<http://inference-web.org/2.0/pml-provenance.owl#MethodRule> . " +
 					"?inferenceRule <http://www.w3.org/2000/01/rdf-schema#label> ?ruleLabel . " +
@@ -167,15 +162,12 @@ public class InferenceRulesComboBox extends IndividualComboBox {
 					"ORDER BY ?ruleLabel";
 			
 		}else{			
-			query = "SELECT DISTINCT ?inferenceRule ?ruleLabel ?ruleClass " +
-					"WHERE {" +
-					"?inferenceRule <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://inference-web.org/2.0/pml-provenance.owl#MethodRule> . " +
-					"?inferenceRule <http://www.w3.org/2000/01/rdf-schema#label> ?ruleLabel . " +
-					"?inferenceRule a ?ruleClass . " +
-					"FILTER (! regex(str(?ruleClass), \".*Thing.*\",\"i\")) . " +
-					"FILTER (! regex(str(?ruleClass), \".*Rule.*\",\"i\")) ." +
-					"FILTER regex(str(?inferenceRule),\"" + Ontology + ".*\", \"i\") .}" +
-					"ORDER BY ?ruleLabel";
+			query = "SELECT DISTINCT ?inferenceRule ?ruleLabel " +
+					"WHERE {  " +
+					"?inferenceRule <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://inference-web.org/2.0/pml-provenance.owl#MethodRule> .  " +
+					"?inferenceRule <http://www.w3.org/2000/01/rdf-schema#label> ?ruleLabel " +
+					"FILTER regex(str(?inferenceRule),\"" + Ontology + ".*\", \"i\") " +
+						"}";
 		}
 		
 		rules = proxy.doQuery(query);
@@ -184,9 +176,9 @@ public class InferenceRulesComboBox extends IndividualComboBox {
 		
 //		System.out.println(rules);
 		
-		String rule, IRClass, IRName;
+		String rule, IRName;
 
-		individuals.add(new Individual("Choose Inference Rule", " -- Choose Inference Rule -- ", "Choose Inference Rule"));
+		individuals.add(new Individual("Choose Activity Method", " -- Choose Activity Method -- ", "Choose Activity Method"));
 		
 		// try web service and update local store	
 		if(results != null)
@@ -196,15 +188,15 @@ public class InferenceRulesComboBox extends IndividualComboBox {
 				
 				rule = QS.get("?inferenceRule").toString();
 				IRName = QS.get("?ruleLabel").toString();
-				IRClass = QS.get("?ruleClass").toString();
+				//IRClass = QS.get("?ruleClass").toString();
 //				String prettyName = IRClass.substring(IRClass.lastIndexOf('#') + 1) + " : " + IRName;
 				String prettyName = IRName;
 				
 //				System.out.println(prettyName);
 				
-				if(IRClass.substring(IRClass.lastIndexOf('#') + 1).equalsIgnoreCase("resource")){
-					rule = null;
-				}
+//				if(IRClass.substring(IRClass.lastIndexOf('#') + 1).equalsIgnoreCase("resource")){
+//					rule = null;
+//				}
 				
 				if(prettyName.contains("@")){
 					prettyName = prettyName.substring(0, prettyName.indexOf('@'));

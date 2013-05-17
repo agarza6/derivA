@@ -41,8 +41,16 @@ public class typeComboBox extends IndividualComboBox {
 		String types = "";
 		if(ontology == null)
 			types = proxy.getInformationSubclasses();
-		else
-			types = proxy.getInferenceRulesWithInfoInWDO(ontology);
+		else{
+			String query = "SELECT DISTINCT ?informationSubclass ?subclassLabel " +
+							"WHERE {  " +
+							"?informationSubclass <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://inference-web.org/2.0/pml-provenance.owl#Information> .  " +
+							"?informationSubclass <http://www.w3.org/2000/01/rdf-schema#label> ?subclassLabel " +
+							"FILTER regex(str(?informationSubclass),\"" + ontology + ".*\", \"i\") " +
+								"}";
+			
+			types = proxy.doQuery(query);
+		}
 
 		ResultSet results = ResultSetFactory.fromXML(types);
 
