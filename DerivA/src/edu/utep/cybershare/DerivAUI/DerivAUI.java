@@ -1321,7 +1321,6 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		currentlySelectedSourcesList.repaint();
 
 
-
 	}
 
 	public void removeSourceAction(java.awt.event.ActionEvent evt){
