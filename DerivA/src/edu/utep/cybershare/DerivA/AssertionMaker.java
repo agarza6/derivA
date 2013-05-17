@@ -37,6 +37,7 @@ public class AssertionMaker {
 	private String dataFilePath;
 	private File file;
 
+	
 	private boolean conclusionFromURL;
 	private String conclusionURI;
 	private String pmljURI;
