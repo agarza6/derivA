@@ -3,40 +3,39 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="/lib/apache/commons-codec-1.4-javadoc.jar"/>
-	<classpathentry kind="lib" path="/lib/apache/commons-codec-1.4-sources.jar"/>
-	<classpathentry kind="lib" path="/lib/apache/commons-codec-1.4.jar"/>
-	<classpathentry kind="lib" path="/lib/apache/commons-logging-1.1.jar"/>
-	<classpathentry kind="lib" path="/lib/apache/ws-commons-util-1.0.2.jar"/>
-	<classpathentry kind="lib" path="/lib/apache/xmlrpc-client-3.1.2.jar"/>
-	<classpathentry kind="lib" path="/lib/apache/xmlrpc-common-3.1.2.jar"/>
-	<classpathentry kind="lib" path="/lib/ciclient/ciclient.jar"/>
-	<classpathentry kind="lib" path="/lib/util/RDFAggregater2.jar"/>
-	<classpathentry kind="lib" path="/lib/util/RDFStore2.jar"/>
-	<classpathentry kind="lib" path="/lib/pml2/pml-lightweight.jar"/>
-	<classpathentry kind="lib" path="/lib/pml2/pml.jar"/>
-	<classpathentry kind="lib" path="/lib/jena262/activation-1.0.2.jar"/>
-	<classpathentry kind="lib" path="/lib/jena262/arq-2.8.3.jar"/>
-	<classpathentry kind="lib" path="/lib/jena262/aterm-java-1.6.jar"/>
-	<classpathentry kind="lib" path="/lib/jena262/axis-1.4.jar"/>
-	<classpathentry kind="lib" path="/lib/jena262/axis-wsdl4j-1.5.1.jar"/>
-	<classpathentry kind="lib" path="/lib/jena262/commons-discovery-0.2.jar"/>
-	<classpathentry kind="lib" path="/lib/jena262/icu4j-3.4.4.jar"/>
-	<classpathentry kind="lib" path="/lib/jena262/iri-0.7.jar"/>
-	<classpathentry kind="lib" path="/lib/jena262/jena-2.6.2.jar"/>
-	<classpathentry kind="lib" path="/lib/jena262/log4j-1.2.14.jar"/>
-	<classpathentry kind="lib" path="/lib/jena262/slf4j-api-1.5.8.jar"/>
-	<classpathentry kind="lib" path="/lib/jena262/slf4j-log4j12-1.5.8.jar"/>
-	<classpathentry kind="lib" path="/lib/jena262/xercesImpl-2.7.1.jar"/>
-	<classpathentry kind="lib" path="/lib/jena262/xsdlib-20030225.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6">
 		<attributes>
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/lib/jgraph/jgraph.jar"/>
-	<classpathentry kind="lib" path="/lib/jgraph/jgraphx-1_5_1_11.jar"/>
-	<classpathentry kind="lib" path="/lib/util/owls-api-3.0.jar"/>
-	<classpathentry kind="lib" path="/lib/apache/commons-net-3.2.jar"/>
+	<classpathentry kind="lib" path="lib/activation-1.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/arq-2.8.3.jar"/>
+	<classpathentry kind="lib" path="lib/aterm-java-1.6.jar"/>
+	<classpathentry kind="lib" path="lib/axis-1.4.jar"/>
+	<classpathentry kind="lib" path="lib/axis-wsdl4j-1.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/ciclient.jar"/>
+	<classpathentry kind="lib" path="lib/commons-codec-1.4-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/commons-codec-1.4-sources.jar"/>
+	<classpathentry kind="lib" path="lib/commons-codec-1.4.jar"/>
+	<classpathentry kind="lib" path="lib/commons-discovery-0.2.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-net-3.2.jar"/>
+	<classpathentry kind="lib" path="lib/icu4j-3.4.4.jar"/>
+	<classpathentry kind="lib" path="lib/iri-0.7.jar"/>
+	<classpathentry kind="lib" path="lib/jena-2.6.2.jar"/>
+	<classpathentry kind="lib" path="lib/jgraph.jar"/>
+	<classpathentry kind="lib" path="lib/jgraphx-1_5_1_11.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.14.jar"/>
+	<classpathentry kind="lib" path="lib/pml-lightweight.jar"/>
+	<classpathentry kind="lib" path="lib/pml.jar"/>
+	<classpathentry kind="lib" path="lib/RDFAggregater2.jar"/>
+	<classpathentry kind="lib" path="lib/RDFStore2.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.5.8.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.5.8.jar"/>
+	<classpathentry kind="lib" path="lib/ws-commons-util-1.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/xercesImpl-2.7.1.jar"/>
+	<classpathentry kind="lib" path="lib/xmlrpc-client-3.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/xmlrpc-common-3.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/xsdlib-20030225.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

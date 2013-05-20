@@ -23,23 +23,19 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Vector;
 
+import java.util.HashMap;
+
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.ResultSetFactory;
 
 import edu.utep.cybershare.DerivA.util.ServerCredentials;
 import edu.utep.cybershare.DerivAUI.DerivAUI;
-import edu.utep.cybershare.DerivAUI.components.AgentComboBox;
 import edu.utep.cybershare.DerivAUI.components.IndividualComboBox.Individual;
-import edu.utep.cybershare.DerivAUI.components.IndividualComboBox;
-import edu.utep.cybershare.DerivAUI.components.IndividualList;
-import edu.utep.cybershare.DerivAUI.components.InferenceRulesComboBox;
-import edu.utep.cybershare.DerivAUI.components.PMLJComboBox;
-import edu.utep.cybershare.DerivAUI.components.PMLJList;
-import edu.utep.cybershare.DerivAUI.components.formatComboBox;
-import edu.utep.cybershare.DerivAUI.components.typeComboBox;
+import edu.utep.cybershare.DerivAUI.components.*;
 
 public class WorkflowDriver extends javax.swing.JFrame {
 
@@ -630,6 +626,7 @@ public class WorkflowDriver extends javax.swing.JFrame {
 
 		String qResult = proxy.doQuery(getFinalConclusion);
 		ResultSet rSet = ResultSetFactory.fromXML(qResult);
+//		ResultSet rSet = ResultSetFactory.fromXML(qResult);
 		int count = 0;
 
 		if(rSet != null){
