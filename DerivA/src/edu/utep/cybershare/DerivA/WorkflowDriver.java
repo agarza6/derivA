@@ -19,18 +19,16 @@ package edu.utep.cybershare.DerivA;
 
 import java.awt.Cursor;
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Vector;
 
-import java.util.HashMap;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
-import com.hp.hpl.jena.query.QuerySolution;
-import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.query.ResultSetFactory;
+import com.hp.hpl.jena.query.*;
 
 import edu.utep.cybershare.DerivA.util.ServerCredentials;
 import edu.utep.cybershare.DerivAUI.DerivAUI;
@@ -39,6 +37,7 @@ import edu.utep.cybershare.DerivAUI.components.*;
 
 public class WorkflowDriver extends javax.swing.JFrame {
 
+	private static final long serialVersionUID = 1L;
 	private DerivAUI instance;
 	private String workflow, conclusion, ontology;
 	private DerivationMaker DM;
@@ -164,14 +163,14 @@ public class WorkflowDriver extends javax.swing.JFrame {
 		jScrollPane1.setViewportView(availableAntecedentsList);
 		jScrollPane2.setViewportView(selectedAntecedentsList);
 
-		addAntecedentButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("../DerivAUI/images/001_01.gif"))); // NOI18N
+		addAntecedentButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/001_01.gif"))); // NOI18N
 		addAntecedentButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				addAntecedentAction(evt);
 			}
 		});
 
-		removeAntecedentButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("../DerivAUI/images/001_02.gif"))); // NOI18N
+		removeAntecedentButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/001_02.gif"))); // NOI18N
 		removeAntecedentButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				removeAntecedentAction(evt);
@@ -624,6 +623,8 @@ public class WorkflowDriver extends javax.swing.JFrame {
 		edu.utep.trust.provenance.RDFStore_Service service = new edu.utep.trust.provenance.RDFStore_Service();
 		edu.utep.trust.provenance.RDFStore proxy = service.getRDFStoreHttpPort();
 
+		URL myClassURL = ResultSet.class.getProtectionDomain().getCodeSource().getLocation();
+		System.out.println("CLASS SRC: " + myClassURL);
 		String qResult = proxy.doQuery(getFinalConclusion);
 		ResultSet rSet = ResultSetFactory.fromXML(qResult);
 //		ResultSet rSet = ResultSetFactory.fromXML(qResult);

@@ -309,8 +309,8 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		ProgressBar.setForeground(Color.green);
 		ProgressBar.setBackground(Color.black);
 
-		check = new ImageIcon(getClass().getResource("images/tick.png"));
-		uncheck = new ImageIcon(getClass().getResource("images/checkbox_unchecked.png"));
+		check = new ImageIcon(getClass().getResource("/Images/tick.png"));
+		uncheck = new ImageIcon(getClass().getResource("/Images/checkbox_unchecked.png"));
 
 		SourceIcon = uncheck;
 		ConclusionIcon = uncheck;
@@ -344,14 +344,14 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		ModeLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
 		ModeLabel.setText("Select Provenance Step Type");
 
-		assertArtifactModeButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("images/assert.png"))); // NOI18N
+		assertArtifactModeButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/assert.png"))); // NOI18N
 		assertArtifactModeButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				assertModeAction(evt);
 			}
 		});
 
-		derivateArtifactModeButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("images/makeDerivation.png"))); // NOI18N
+		derivateArtifactModeButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/makeDerivation.png"))); // NOI18N
 		derivateArtifactModeButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				derivateModeAction(evt);
@@ -359,7 +359,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		});
 
 		docArtifactModeButton.setEnabled(false);
-		docArtifactModeButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("images/docDerivatio.png"))); // NOI18N
+		docArtifactModeButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/docDerivatio.png"))); // NOI18N
 		docArtifactModeButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				docDerivateModeAction(evt);
@@ -492,7 +492,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		jScrollPane5.setViewportView(currentlySelectedSourcesList);
 
 		addSourceButton.setFont(new java.awt.Font("Tahoma", 1, 14));
-		addSourceButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("images/001_01.gif"))); // NOI18N
+		addSourceButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/001_01.gif"))); // NOI18N
 		addSourceButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				addSourceAction(evt);
@@ -500,7 +500,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		});
 
 		removeSourceButton.setFont(new java.awt.Font("Tahoma", 1, 14));
-		removeSourceButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("images/001_02.gif"))); // NOI18N
+		removeSourceButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/001_02.gif"))); // NOI18N
 		removeSourceButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				removeSourceAction(evt);
@@ -826,7 +826,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		jScrollPane3.setViewportView(currentlySelectedAntecedentList);
 
 		addAntecedentButton.setFont(new java.awt.Font("Tahoma", 1, 14));
-		addAntecedentButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("images/001_01.gif"))); // NOI18N
+		addAntecedentButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/001_01.gif"))); // NOI18N
 		addAntecedentButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				addAntecedentAction(evt);
@@ -834,7 +834,7 @@ public class DerivAUI extends javax.swing.JFrame implements PropertyChangeListen
 		});
 
 		removeAntecedentButton.setFont(new java.awt.Font("Tahoma", 1, 14));
-		removeAntecedentButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("images/001_02.gif"))); // NOI18N
+		removeAntecedentButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/001_02.gif"))); // NOI18N
 		removeAntecedentButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				removeAntecedentAction(evt);
