@@ -15,10 +15,16 @@ import java.io.PrintWriter;
 
 public class FTPServerUploader {
 
-	private String server = "ftp.thewrestlingrevolution.com";
+//	private String server = "ftp.thewrestlingrevolution.com";
+//	private int port = 21;
+//	private String username = "thewre8";
+//	private String password = "arcade1984!";
+	
+	private String server = "ftp.marioslaguitarra.com";
 	private int port = 21;
-	private String username = "thewre8";
-	private String password = "arcade1984!";
+	private String username = "laguitarra";
+	private String password = "JuliaOtero#1";
+	
 	private String remote = null, local = null;
 
 	public void setRemoteFile(String url){remote = url;}
@@ -26,7 +32,7 @@ public class FTPServerUploader {
 	public String uploadFile(String localFilePath){
 		
 		local = localFilePath;
-		remote = "www/uploads/" + local.substring(local.lastIndexOf('\\') + 1);
+		remote = "/uploads/" + local.substring(local.lastIndexOf('\\') + 1);
 		
 		boolean storeFile = true, binaryTransfer = true, error = false, hidden = false;
 	    boolean localActive = false, useEpsvWithIPv4 = false, printHash = false;
@@ -51,6 +57,7 @@ public class FTPServerUploader {
 
 	    try
 	    {
+	    	System.out.println("C-C-Connect!");
 	        int reply;
 	        if (port > 0) {
 	            ftp.connect(server, port);
@@ -150,7 +157,7 @@ public class FTPServerUploader {
 	    }
 
 	    System.out.println("FILE UPLOADED");
-	    return "http://thewrestlingrevolution.com/uploads/" + local.substring(local.lastIndexOf('\\') + 1); 
+	    return "http://marioslaguitarra.com/uploads/" + local.substring(local.lastIndexOf('\\') + 1); 
 	}
 	
 	public static void main(String[] args){

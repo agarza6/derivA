@@ -54,8 +54,6 @@ public class DerivationMaker {
 		FTPServerUploader FTP = new FTPServerUploader();	
 		conclusionURI = FTP.uploadFile(dataFilePath);
 		
-		
-		
 //		byte[] resource_bytes = null;
 //
 //		//			contents = GetURLContents.downloadText("file:\\"+dataFilePath);
@@ -92,7 +90,7 @@ public class DerivationMaker {
 		}
 
 		if(result.equalsIgnoreCase("SUCCESS")){
-			JOptionPane.showMessageDialog(null, "Derivation: Upload Successful");
+			JOptionPane.showMessageDialog(null, "Derivation: Upload Successful \n " + pmljURI);
 		}else{
 			JOptionPane.showMessageDialog(null, "Aggregation Failed");
 		}

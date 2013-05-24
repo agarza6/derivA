@@ -42,6 +42,7 @@ public class WorkflowDriver extends javax.swing.JFrame {
 	private String workflow, conclusion, ontology;
 	private DerivationMaker DM;
 	private ServerCredentials creds;
+	private Cursor waiting = new Cursor(Cursor.WAIT_CURSOR), normal;
 
 	// Variables declaration - do not modify                     
 	private javax.swing.JButton addAntecedentButton;
@@ -216,7 +217,7 @@ public class WorkflowDriver extends javax.swing.JFrame {
 		int TypeCount = conclusionTypeComboBox.getItemCount();
 		conclusionTypesFound.setText("Found " + TypeCount);
 
-		procedeButton.setText("Proceed");
+		procedeButton.setText("Annotate Provenance");
 		procedeButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				submitAction(evt);
@@ -607,6 +608,7 @@ public class WorkflowDriver extends javax.swing.JFrame {
 	}
 
 	public boolean isFinalConclusion(String conclusion){
+		setCursor(waiting);
 		System.out.println("CHECK IF CONCLUSION IS FINAL");
 		String conclusionType = getConclusionTypeFromNode(conclusion);
 
@@ -638,7 +640,8 @@ public class WorkflowDriver extends javax.swing.JFrame {
 		}
 
 		System.out.println("COUNT ->: " + count);
-
+		
+		setCursor(normal);
 		if(count > 0)
 			return false;
 		else
